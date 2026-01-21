@@ -1,4 +1,4 @@
-import Post from "../Models/post";
+import Post from "../Models/post.js";
 
 async function createPost(req, res) {
   let { user, caption, content } = req.body;
