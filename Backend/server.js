@@ -1,6 +1,11 @@
 import express from "express";
 import cors from "cors";
-import postRoutes from "./Routes/postRoutes";
+import postRoutes from "./Routes/postRoutes.js";
+import dotenv from "dotenv";
+import connectDB from "./db.js";
+dotenv.config();
+//DB connection
+connectDB();
 
 const app = express();
 
