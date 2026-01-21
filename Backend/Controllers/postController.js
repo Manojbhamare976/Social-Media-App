@@ -1,5 +1,4 @@
 import Post from "../Models/post";
-import mongoose from "mongoose";
 
 async function createPost(req, res) {
   let { user, caption, content } = req.body;
@@ -8,12 +7,12 @@ async function createPost(req, res) {
     caption: caption,
     content: content,
   });
-  await post
-    .save()
-    .then(console.log("post saved succesfully"))
-    .catch((err) => {
-      console.log(err);
-    });
+  try {
+    await post.save().then(console.log("post saved succesfully"));
+    res.json(post);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 export { createPost };
