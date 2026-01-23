@@ -15,4 +15,14 @@ async function createPost(req, res) {
   }
 }
 
-export { createPost };
+async function deletePost(req, res) {
+  let { _id } = req.body;
+  const postToBeDeleted = await Post.findByIdAndDelete(_id);
+  if (postToBeDeleted) {
+    return res.status(500).json("Post deleted successfully");
+  } else {
+    return console.log("Post not found");
+  }
+}
+
+export { createPost, deletePost };
