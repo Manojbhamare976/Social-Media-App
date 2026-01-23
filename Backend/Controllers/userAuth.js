@@ -1,11 +1,14 @@
 import jwt from "jsonwebtoken";
 import User from "../Models/user.js";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
 
-async function signup() {
+dotenv.config();
+
+async function signup(req, res) {
   let { username, email, password } = req.body;
-  let hashedPassword = bcrypt.hash(password, 10);
-
+  let hashedPassword = await bcrypt.hash(password, 10);
+  console.log();
   let user = new User({
     username: username,
     email: email,
@@ -18,8 +21,15 @@ async function signup() {
       console.log("User created successfully");
     })
     .catch((err) => {
-      console.log(err);
+      return console.log(err.message);
     });
+
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "15m",
+  });
+
+  console.log(token);
+  res.json(token);
 }
 
 export { signup };
