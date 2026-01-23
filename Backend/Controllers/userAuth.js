@@ -35,17 +35,26 @@ async function signup(req, res) {
 async function login(req, res) {
   let { username, email, password } = req.body;
 
-  let user = await User.findOne({ username: username });
-  if (user) {
-    console.log("User found successfully");
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "15m",
-    });
-    res.json(token);
-    return res.json("Log in successfull");
-  } else {
-    return console.log("Cannot find user");
+  let user = await User.findOne({ username: username, email: email });
+
+  if (!user) {
+    return res.status(404).json("Cannot find user");
   }
+
+  let isPasswordMatched = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordMatched) {
+    return res.status(400).json("Password did not match");
+  }
+
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "15m",
+  });
+
+  return res.json({
+    msg: "Login successfull",
+    token,
+  });
 }
 
 export { signup, login };
