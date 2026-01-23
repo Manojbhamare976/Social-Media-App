@@ -82,4 +82,22 @@ async function login(req, res) {
   }
 }
 
-export { signup, login };
+async function logout(req, res) {
+  try {
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+    });
+
+    return res.status(200).json({
+      message: "Logout successful",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Logout failed",
+    });
+  }
+}
+
+export { signup, login, logout };
