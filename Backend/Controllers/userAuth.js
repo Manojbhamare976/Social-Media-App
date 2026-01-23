@@ -33,28 +33,38 @@ async function signup(req, res) {
 }
 
 async function login(req, res) {
-  let { username, email, password } = req.body;
+  try {
+    let { username, email, password } = req.body;
 
-  let user = await User.findOne({ username: username, email: email });
+    let user = await User.findOne({ username: username, email: email });
 
-  if (!user) {
-    return res.status(404).json("Cannot find user");
+    if (!user) {
+      return res.status(404).json("Cannot find user");
+    }
+
+    let isPasswordMatched = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordMatched) {
+      return res.status(400).json("Password did not match");
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+    res.cookie("accessToken", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    return res.json({
+      msg: "Login successfull",
+      token,
+    });
+  } catch (err) {
+    console.log(err.message);
   }
-
-  let isPasswordMatched = await bcrypt.compare(password, user.password);
-
-  if (!isPasswordMatched) {
-    return res.status(400).json("Password did not match");
-  }
-
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "15m",
-  });
-
-  return res.json({
-    msg: "Login successfull",
-    token,
-  });
 }
 
 export { signup, login };
