@@ -32,4 +32,20 @@ async function signup(req, res) {
   res.json(token);
 }
 
-export { signup };
+async function login(req, res) {
+  let { username, email, password } = req.body;
+
+  let user = await User.findOne({ username: username });
+  if (user) {
+    console.log("User found successfully");
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+    res.json(token);
+    return res.json("Log in successfull");
+  } else {
+    return console.log("Cannot find user");
+  }
+}
+
+export { signup, login };
