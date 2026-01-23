@@ -6,30 +6,44 @@ import dotenv from "dotenv";
 dotenv.config();
 
 async function signup(req, res) {
-  let { username, email, password } = req.body;
-  let hashedPassword = await bcrypt.hash(password, 10);
-  console.log();
-  let user = new User({
-    username: username,
-    email: email,
-    password: hashedPassword,
-  });
-
-  user
-    .save()
-    .then(() => {
-      console.log("User created successfully");
-    })
-    .catch((err) => {
-      return console.log(err.message);
+  try {
+    let { username, email, password } = req.body;
+    let hashedPassword = await bcrypt.hash(password, 10);
+    console.log();
+    let user = new User({
+      username: username,
+      email: email,
+      password: hashedPassword,
     });
 
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "15m",
-  });
+    user
+      .save()
+      .then(() => {
+        console.log("User created successfully");
+      })
+      .catch((err) => {
+        return console.log(err.message);
+      });
 
-  console.log(token);
-  res.json(token);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    res.cookie("accessToken", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    console.log(token);
+    return res.json({
+      msg: "signup successfull",
+      token,
+    });
+  } catch (err) {
+    return console.log(err.message);
+  }
 }
 
 async function login(req, res) {
@@ -51,6 +65,7 @@ async function login(req, res) {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "15m",
     });
+
     res.cookie("accessToken", token, {
       httpOnly: true,
       secure: false,
