@@ -50,7 +50,7 @@ async function login(req, res) {
   try {
     let { username, email, password } = req.body;
 
-    let user = await User.findOne({ username: username, email: email });
+    let user = await User.findOne({ $or: [{ username }, { email }] });
 
     if (!user) {
       return res.status(404).json("Cannot find user");
@@ -62,15 +62,28 @@ async function login(req, res) {
       return res.status(400).json("Password did not match");
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "15m",
     });
 
-    res.cookie("accessToken", token, {
+    res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
       maxAge: 15 * 60 * 1000,
+    });
+
+    let refreshToken = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_REFRESH_TOKEN,
+      { expiresIn: "7d" },
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.json({
