@@ -156,4 +156,21 @@ const loginLimiter = rateLimit({
   message: "Too many login attempts",
 });
 
-export { signup, login, logout, loginLimiter, refresh };
+async function authenticateUser(req, res, next) {
+  const token = req.cookies.accessToken;
+
+  if (!token) {
+    return res.status(403).json({ msg: "Invalid token" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ msg: "Token invalid or expired" });
+    }
+
+    req.user = decoded;
+    next();
+  });
+}
+
+export { signup, login, logout, loginLimiter, refresh, authenticateUser };
