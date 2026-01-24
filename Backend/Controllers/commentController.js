@@ -13,10 +13,19 @@ async function createComment(req, res) {
   });
 
   try {
-    comment.save();
+    await comment.save();
   } catch (err) {
     return res.json(err.message);
   }
 }
 
-export { createComment };
+async function deleteComment(req, res) {
+  let { commentId } = req.body;
+  let comment = await Comment.findById(commentId);
+  if (!comment) {
+    return res.status(404).json("Couldn't find comment");
+  }
+  return comment;
+}
+
+export { createComment, deleteComment };
