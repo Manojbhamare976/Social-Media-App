@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../Models/user.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import rateLimit from "express-rate-limit";
 
 dotenv.config();
 
@@ -113,4 +114,10 @@ async function logout(req, res) {
   }
 }
 
-export { signup, login, logout };
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 100,
+  max: 10,
+  message: "Too many login attempts",
+});
+
+export { signup, login, logout, loginLimiter };
