@@ -14,6 +14,7 @@ async function createComment(req, res) {
 
   try {
     await comment.save();
+    res.json("Comment saved successfully");
   } catch (err) {
     return res.json(err.message);
   }
@@ -26,7 +27,9 @@ async function deleteComment(req, res) {
     return res.status(404).json("Couldn't find comment");
   }
   if (comment.author == req.cookies.userId) {
-    await comment.deleteOne({});
+    return await comment.deleteOne({});
+  } else {
+    return res.status(404).json("User not found");
   }
 }
 
