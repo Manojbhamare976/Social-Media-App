@@ -10,7 +10,7 @@ async function signup(req, res) {
   try {
     let { username, email, password } = req.body;
     let hashedPassword = await bcrypt.hash(password, 10);
-    console.log();
+
     let user = new User({
       username: username,
       email: email,
@@ -26,18 +26,18 @@ async function signup(req, res) {
         return console.log(err.message);
       });
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "15m",
     });
 
-    res.cookie("accessToken", token, {
+    res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
       maxAge: 15 * 60 * 1000,
     });
 
-    console.log(token);
+    console.log(accessToken);
     return res.json({
       msg: "signup successfull",
       token,
