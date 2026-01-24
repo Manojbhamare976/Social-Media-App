@@ -9,6 +9,6 @@ import { authenticateUser } from "../Controllers/userAuth.js";
 const router = express.Router();
 
 router.post("/create", authenticateUser, createComment);
-router.delete("/delete", authenticateUser, createComment);
+router.delete("/delete", authenticateUser, deleteComment);
 
 export default router;
