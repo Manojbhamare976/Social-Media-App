@@ -25,7 +25,9 @@ async function deleteComment(req, res) {
   if (!comment) {
     return res.status(404).json("Couldn't find comment");
   }
-  return comment;
+  if (comment.author == req.cookies.userId) {
+    await comment.deleteOne({});
+  }
 }
 
 export { createComment, deleteComment };
