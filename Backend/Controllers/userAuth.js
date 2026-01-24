@@ -114,10 +114,46 @@ async function logout(req, res) {
   }
 }
 
+async function refresh(req, res) {
+  const token = req.cookies.refreshToken;
+
+  if (!token) {
+    return res.status(401).json({ msg: "Refresh token missing" });
+  }
+
+  jwt.verify(token, process.env.JWT_REFRESH_TOKEN, async (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ msg: "Invalid refresh token" });
+    }
+
+    const user = await User.findById(decoded.userId);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Generate new access token
+    const newAccessToken = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "15m" },
+    );
+
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    return res.json({ accessToken: newAccessToken });
+  });
+}
+
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 100,
   max: 10,
   message: "Too many login attempts",
 });
 
-export { signup, login, logout, loginLimiter };
+export { signup, login, logout, loginLimiter, refresh };
