@@ -25,4 +25,9 @@ async function deletePost(req, res) {
   }
 }
 
-export { createPost, deletePost };
+async function getPost(req, res) {
+  let posts = Post.find({});
+  res.json([posts]);
+}
+
+export { createPost, deletePost, getPost };
