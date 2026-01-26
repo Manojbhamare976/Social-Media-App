@@ -9,6 +9,15 @@ dotenv.config();
 async function signup(req, res) {
   try {
     let { username, email, password } = req.body;
+
+    if (!username) {
+      return res.status(404).json({ msg: "Please enter username" });
+    } else if (!email) {
+      return res.status(404).json({ msg: "Please enter email" });
+    } else if (!password) {
+      return res.status(404).json({ msg: "Please enter password" });
+    }
+
     let hashedPassword = await bcrypt.hash(password, 10);
 
     let user = new User({
@@ -17,7 +26,7 @@ async function signup(req, res) {
       password: hashedPassword,
     });
 
-    user
+    await user
       .save()
       .then(() => {
         console.log("User created successfully");
@@ -40,7 +49,7 @@ async function signup(req, res) {
     console.log(accessToken);
     return res.json({
       msg: "signup successfull",
-      token,
+      accessToken,
     });
   } catch (err) {
     return console.log(err.message);
@@ -89,7 +98,7 @@ async function login(req, res) {
 
     return res.json({
       msg: "Login successfull",
-      token,
+      accessToken,
     });
   } catch (err) {
     console.log(err.message);
