@@ -26,8 +26,12 @@ async function deletePost(req, res) {
 }
 
 async function getPost(req, res) {
-  let posts = Post.find({});
-  res.json([posts]);
+  try {
+    let post = await Post.find({}).populate("user", "username");
+    res.json(post);
+  } catch (err) {
+    console.log(err.message);
+  }
 }
 
 export { createPost, deletePost, getPost };
