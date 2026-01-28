@@ -60,4 +60,32 @@ async function isFollowing(req, res) {
   }
 }
 
-export { increaseFollowers, isFollowing };
+async function decreaseFollowers(req, res) {
+  try {
+    let { userId } = req.user;
+    let { userid } = req.body;
+
+    let user = User.findById(userId);
+    let userToBeUnfollowed = User.findById(userid);
+
+    let follow = await userToBeUnfollowed.followers.find(
+      (u) => u._id === user._id,
+    );
+
+    if (!follow) {
+      return res.json({
+        msg: `you are not following ${userToBeUnfollowed.username}`,
+      });
+    }
+
+    await userToBeUnfollowed.followers.filter((u) => u._id === user._id);
+    await userToBeUnfollowed.save();
+    console.log("unfollowed user");
+    return res.status(200).json({ msg: "unfollowed user" });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+export { increaseFollowers, decreaseFollowers, isFollowing };
