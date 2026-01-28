@@ -14,11 +14,26 @@ export default function Homepage() {
     getPosts();
   }, []);
 
+  async function incFollowers(userid) {
+    try {
+      api.post("/userprofile/increase/followers", { userid: userid });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <>
       {posts?.map((p) => (
         <div key={p._id}>
           <p>{p.user.username}</p>
+          <button
+            onClick={() => {
+              incFollowers(p.user._id);
+            }}
+          >
+            Follow
+          </button>
           <p>{p.content}</p>
           <Heart />
           <MessageCircle />
