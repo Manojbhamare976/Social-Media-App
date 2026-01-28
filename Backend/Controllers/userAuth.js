@@ -144,7 +144,7 @@ async function refresh(req, res) {
     // Generate new access token
     const newAccessToken = jwt.sign(
       { userId: user._id },
-      process.env.JWT_SECRET_KEY,
+      process.env.JWT_SECRET,
       { expiresIn: "15m" },
     );
 
@@ -172,7 +172,7 @@ async function authenticateUser(req, res, next) {
     return res.status(403).json({ msg: "Invalid token" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       return res.status(403).json({ msg: "Token invalid or expired" });
     }
