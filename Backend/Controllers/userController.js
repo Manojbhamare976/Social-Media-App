@@ -35,4 +35,29 @@ async function increaseFollowers(req, res) {
   }
 }
 
-export { increaseFollowers };
+async function isFollowing(req, res) {
+  let { userId } = req.user;
+  let { userid } = req.body;
+
+  let user = User.findById(userId);
+  let userToCheck = User.findById(userid);
+
+  if (!user) {
+    return res.status(404).json({ msg: "user not found" });
+  } else if (!userToCheck) {
+    return res.status(404).json({ msg: "user not found" });
+  }
+
+  let follower = await userToCheck.followers.find((u) => u._id === user._id);
+
+  if (!follower) {
+    res.json({
+      msg: `you are not following ${userToCheck.username}`,
+    });
+    return false;
+  } else {
+    return true;
+  }
+}
+
+export { increaseFollowers, isFollowing };
