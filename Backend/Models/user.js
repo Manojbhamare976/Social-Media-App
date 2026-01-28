@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema(
     ],
     followersCount: {
       type: Number,
+      default: 0,
     },
     following: [
       {
@@ -37,6 +38,7 @@ const userSchema = new mongoose.Schema(
     ],
     followingCount: {
       type: Number,
+      default: 0,
     },
   },
   { timestamps: true },
