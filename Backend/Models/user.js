@@ -26,12 +26,18 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    followersCount: {
+      type: Number,
+    },
     following: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
     ],
+    followingCount: {
+      type: Number,
+    },
   },
   { timestamps: true },
 );
