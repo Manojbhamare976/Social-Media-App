@@ -3,6 +3,7 @@ import cors from "cors";
 import postRoutes from "./Routes/postRoutes.js";
 import userAuthRoutes from "./Routes/userAuthRoutes.js";
 import commentRoutes from "./Routes/commentRoutes.js";
+import userprofileRoutes from "./Routes/userRoutes.js";
 import dotenv from "dotenv";
 import connectDB from "./db.js";
 import cookieParser from "cookie-parser";
@@ -29,6 +30,9 @@ app.use("/post", postRoutes);
 
 //user auth routes
 app.use("/user", userAuthRoutes);
+
+//user profile routes
+app.use("/userprofile", userprofileRoutes);
 
 //comment routes
 app.use("/comment", commentRoutes);
