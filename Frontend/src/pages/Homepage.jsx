@@ -8,20 +8,18 @@ export default function Homepage() {
   useEffect(() => {
     async function getPosts() {
       const post = await api.get("/post/find");
-
-      const allContents = post.data.flatMap((d) => d.content);
-
-      setPosts(allContents);
+      console.log(post);
+      setPosts(post.data);
     }
-
     getPosts();
   }, []);
 
   return (
     <>
       {posts?.map((p) => (
-        <div>
-          <p>{p}</p>
+        <div key={p._id}>
+          <p>{p.user.username}</p>
+          <p>{p.content}</p>
           <Heart />
           <MessageCircle />
           <Share />
