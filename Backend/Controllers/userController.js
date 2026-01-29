@@ -36,27 +36,23 @@ async function increaseFollowers(req, res) {
 }
 
 async function isFollowing(req, res) {
-  let { userId } = req.user;
-  let { userid } = req.body;
+  try {
+    let { userId } = req.user;
+    let { userid } = req.query;
 
-  let user = User.findById(userId);
-  let userToCheck = User.findById(userid);
+    let userToCheck = await User.findById(userid);
 
-  if (!user) {
-    return res.status(404).json({ msg: "user not found" });
-  } else if (!userToCheck) {
-    return res.status(404).json({ msg: "user not found" });
-  }
+    if (!userToCheck) {
+      return res.status(404).json({ msg: "user not found" });
+    }
 
-  let follower = await userToCheck.followers.find((u) => u._id === user._id);
+    let following = userToCheck.followers.includes(userId);
 
-  if (!follower) {
-    res.json({
-      msg: `you are not following ${userToCheck.username}`,
+    return res.json({
+      following,
     });
-    return false;
-  } else {
-    return true;
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
   }
 }
 
@@ -65,25 +61,26 @@ async function decreaseFollowers(req, res) {
     let { userId } = req.user;
     let { userid } = req.body;
 
-    let user = User.findById(userId);
-    let userToBeUnfollowed = User.findById(userid);
+    let user = await User.findById(userId);
+    let userToUnfollow = await User.findById(userid);
 
-    let follow = await userToBeUnfollowed.followers.find(
-      (u) => u._id === user._id,
-    );
-
-    if (!follow) {
-      return res.json({
-        msg: `you are not following ${userToBeUnfollowed.username}`,
-      });
+    if (!user || !userToUnfollow) {
+      return res.status(404).json({ msg: "User not found" });
     }
 
-    await userToBeUnfollowed.followers.filter((u) => u._id === user._id);
-    await userToBeUnfollowed.save();
-    console.log("unfollowed user");
-    return res.status(200).json({ msg: "unfollowed user" });
+    userToUnfollow.followers = userToUnfollow.followers.filter(
+      (id) => id.toString() !== userId,
+    );
+    userToUnfollow.followersCount -= 1;
+
+    user.following = user.following.filter((id) => id.toString() !== userid);
+    user.followingCount -= 1;
+
+    await userToUnfollow.save();
+    await user.save();
+
+    return res.json({ msg: "Unfollowed successfully" });
   } catch (err) {
-    console.log(err.message);
     return res.status(500).json({ msg: err.message });
   }
 }
