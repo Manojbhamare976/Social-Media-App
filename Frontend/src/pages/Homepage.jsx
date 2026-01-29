@@ -4,22 +4,37 @@ import { Heart, MessageCircle, Share, Bookmark } from "lucide-react";
 
 export default function Homepage() {
   let [posts, setPosts] = useState([]);
+  let [followMap, setFollowMap] = useState({});
 
   useEffect(() => {
     async function getPosts() {
-      const post = await api.get("/post/find");
-      console.log(post);
-      setPosts(post.data);
+      const postRes = await api.get("/post/find");
+      console.log(postRes);
+      setPosts(postRes.data);
+
+      // check follow status for each post user
+      postRes.data.forEach(async (p) => {
+        const res = await api.get("/userprofile/isfollowing", {
+          params: { userid: p.user._id },
+        });
+
+        setFollowMap((prev) => ({
+          ...prev,
+          [p.user._id]: res.data.following,
+        }));
+      });
     }
     getPosts();
   }, []);
 
-  async function incFollowers(userid) {
-    try {
-      api.post("/userprofile/increase/followers", { userid: userid });
-    } catch (err) {
-      console.log(err);
-    }
+  async function followUser(userid) {
+    await api.post("/userprofile/increase/followers", { userid });
+    setFollowMap((prev) => ({ ...prev, [userid]: true }));
+  }
+
+  async function unfollowUser(userid) {
+    await api.put("/userprofile/decrease/followers", { userid });
+    setFollowMap((prev) => ({ ...prev, [userid]: false }));
   }
 
   return (
@@ -27,13 +42,12 @@ export default function Homepage() {
       {posts?.map((p) => (
         <div key={p._id}>
           <p>{p.user.username}</p>
-          <button
-            onClick={() => {
-              incFollowers(p.user._id);
-            }}
-          >
-            Follow
-          </button>
+
+          {followMap[p.user._id] ? (
+            <button onClick={() => unfollowUser(p.user._id)}>Unfollow</button>
+          ) : (
+            <button onClick={() => followUser(p.user._id)}>Follow</button>
+          )}
           <p>{p.content}</p>
           <Heart />
           <MessageCircle />
