@@ -27,6 +27,7 @@ export default function Homepage() {
     getPosts();
   }, []);
 
+  //follow user function
   async function followUser(userid) {
     await api.post("/userprofile/increase/followers", { userid });
     setFollowMap((prev) => ({ ...prev, [userid]: true }));
@@ -35,6 +36,12 @@ export default function Homepage() {
   async function unfollowUser(userid) {
     await api.put("/userprofile/decrease/followers", { userid });
     setFollowMap((prev) => ({ ...prev, [userid]: false }));
+  }
+
+  //like posts function
+  async function likePost(postId) {
+    api.post("/like/like", { postId });
+    console.log("like button pushed");
   }
 
   return (
@@ -49,7 +56,13 @@ export default function Homepage() {
             <button onClick={() => followUser(p.user._id)}>Follow</button>
           )}
           <p>{p.content}</p>
-          <Heart />
+          <button
+            onClick={() => {
+              likePost(p._id);
+            }}
+          >
+            <Heart />
+          </button>
           <MessageCircle />
           <Share />
           <Bookmark />
