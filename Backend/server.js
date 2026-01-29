@@ -4,6 +4,7 @@ import postRoutes from "./Routes/postRoutes.js";
 import userAuthRoutes from "./Routes/userAuthRoutes.js";
 import commentRoutes from "./Routes/commentRoutes.js";
 import userprofileRoutes from "./Routes/userRoutes.js";
+import likeRoutes from "./Routes/likeRoutes.js";
 import dotenv from "dotenv";
 import connectDB from "./db.js";
 import cookieParser from "cookie-parser";
@@ -33,6 +34,9 @@ app.use("/user", userAuthRoutes);
 
 //user profile routes
 app.use("/userprofile", userprofileRoutes);
+
+//like routes
+app.use("/like", likeRoutes);
 
 //comment routes
 app.use("/comment", commentRoutes);
