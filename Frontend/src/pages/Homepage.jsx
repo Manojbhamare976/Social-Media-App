@@ -51,11 +51,11 @@ export default function Homepage() {
     console.log("dislike button pushed");
   }
 
+  //this function checks if a post is liked by the user
   async function isliked(postId) {
     let res = await api.get("/like/isliked", {
       params: { postId: postId },
     });
-    console.log(`res returned this ${res.data.likedPost}`);
     return res.data.likedPost;
   }
 
@@ -73,6 +73,18 @@ export default function Homepage() {
     await api.put("/save/unsave", { postId });
   }
 
+  //this function checks if a post is saved by the user
+  async function isSaved(postId) {
+    try {
+      let res = await api.get("/save/issaved", {
+        params: { postId: postId },
+      });
+      return res.data.userSavedPosts;
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
   return (
     <>
       {posts?.map((p) => (
@@ -88,7 +100,6 @@ export default function Homepage() {
           <button
             onClick={async () => {
               let result = await isliked(p._id);
-              console.log(`result returned this -> ${result}`);
               if (result) {
                 dislikePost(p._id);
               } else {
@@ -100,8 +111,13 @@ export default function Homepage() {
           </button>
           <MessageCircle />
           <button
-            onClick={() => {
-              savePost(p._id);
+            onClick={async () => {
+              let result = await isSaved(p._id);
+              if (result) {
+                unsavePost(p._id);
+              } else {
+                savePost(p._id);
+              }
             }}
           >
             <Bookmark />
