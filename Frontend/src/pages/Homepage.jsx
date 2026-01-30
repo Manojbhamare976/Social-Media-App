@@ -68,6 +68,11 @@ export default function Homepage() {
     }
   }
 
+  //unsave post function
+  async function unsavePost(postId) {
+    await api.put("/save/unsave", { postId });
+  }
+
   return (
     <>
       {posts?.map((p) => (
