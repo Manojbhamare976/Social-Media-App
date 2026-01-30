@@ -59,6 +59,15 @@ export default function Homepage() {
     return res.data.likedPost;
   }
 
+  //save post function
+  async function savePost(postId) {
+    try {
+      await api.post("/save/save", { postId });
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
   return (
     <>
       {posts?.map((p) => (
@@ -85,8 +94,13 @@ export default function Homepage() {
             <Heart />
           </button>
           <MessageCircle />
-          <Share />
-          <Bookmark />
+          <button
+            onClick={() => {
+              savePost(p._id);
+            }}
+          >
+            <Bookmark />
+          </button>
         </div>
       ))}
     </>
