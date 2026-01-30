@@ -33,6 +33,7 @@ export default function Homepage() {
     setFollowMap((prev) => ({ ...prev, [userid]: true }));
   }
 
+  //unfollow user function
   async function unfollowUser(userid) {
     await api.put("/userprofile/decrease/followers", { userid });
     setFollowMap((prev) => ({ ...prev, [userid]: false }));
@@ -42,6 +43,20 @@ export default function Homepage() {
   async function likePost(postId) {
     api.post("/like/like", { postId });
     console.log("like button pushed");
+  }
+
+  //dislike posts function
+  async function dislikePost(postId) {
+    api.put("/like/dislike", { postId });
+    console.log("dislike button pushed");
+  }
+
+  async function isliked(postId) {
+    let res = await api.get("/like/isliked", {
+      params: { postId: postId },
+    });
+    console.log(`res returned this ${res.data.likedPost}`);
+    return res.data.likedPost;
   }
 
   return (
@@ -57,8 +72,14 @@ export default function Homepage() {
           )}
           <p>{p.content}</p>
           <button
-            onClick={() => {
-              likePost(p._id);
+            onClick={async () => {
+              let result = await isliked(p._id);
+              console.log(`result returned this -> ${result}`);
+              if (result) {
+                dislikePost(p._id);
+              } else {
+                likePost(p._id);
+              }
             }}
           >
             <Heart />
