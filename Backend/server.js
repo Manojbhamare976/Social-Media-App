@@ -5,6 +5,7 @@ import userAuthRoutes from "./Routes/userAuthRoutes.js";
 import commentRoutes from "./Routes/commentRoutes.js";
 import userprofileRoutes from "./Routes/userRoutes.js";
 import likeRoutes from "./Routes/likeRoutes.js";
+import saveRoutes from "./Routes/saveRoutes.js";
 import dotenv from "dotenv";
 import connectDB from "./db.js";
 import cookieParser from "cookie-parser";
@@ -40,5 +41,8 @@ app.use("/like", likeRoutes);
 
 //comment routes
 app.use("/comment", commentRoutes);
+
+//post routes
+app.use("/save", saveRoutes);
 
 app.listen(3000, () => console.log("Server running on port 3000"));
