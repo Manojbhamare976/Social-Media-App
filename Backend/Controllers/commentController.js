@@ -1,13 +1,14 @@
 import Comment from "../Models/comment.js";
 
 async function createComment(req, res) {
-  let { authorId, postId, text } = req.body;
+  let { userId } = req.user;
+  let { postId, text } = req.body;
   if (!text) {
     return res.status(404).json("Please create a comment");
   }
 
   let comment = new Comment({
-    author: authorId,
+    author: userId,
     post: postId,
     text: text,
   });
