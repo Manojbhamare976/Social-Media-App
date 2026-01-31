@@ -3,6 +3,7 @@ import api from "../api/axiosUserClient";
 
 export default function CreateComment({ postId }) {
   let [comments, setComments] = useState([]);
+  let [commentText, setCommentText] = useState({ text: "" });
 
   useEffect(() => {
     async function showComments() {
@@ -17,14 +18,29 @@ export default function CreateComment({ postId }) {
     showComments();
   }, []);
 
+  async function createComment(e) {
+    e.preventDefault();
+    let text = commentText.text;
+    await api.post("/comment/create", { postId: postId, text: text });
+  }
+
   return (
     <>
       {comments?.map((c) => {
-        <div>{c}</div>;
+        <div>{c.text}</div>;
       })}
 
       <form>
-        <input placeholder="write comment"></input>
+        <input
+          name="text"
+          type="text"
+          placeholder="write comment"
+          value={commentText.text}
+          onChange={(e) =>
+            setCommentText({ ...commentText, [e.target.name]: e.target.value })
+          }
+        />
+        <button onClick={createComment}>Create comment</button>
       </form>
     </>
   );
