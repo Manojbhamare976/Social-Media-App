@@ -1,4 +1,5 @@
 import Comment from "../Models/comment.js";
+import Post from "../Models/post.js";
 
 async function createComment(req, res) {
   let { userId } = req.user;
@@ -34,4 +35,14 @@ async function deleteComment(req, res) {
   }
 }
 
-export { createComment, deleteComment };
+async function showComments(req, res) {
+  let { postId } = req.query;
+  let post = await Post.findById(postId).populate("comments");
+  if (!post) {
+    return res.status(400).json({ msg: "post not found" });
+  }
+  console.log(post.comments);
+  return res.json(post.comments);
+}
+
+export { createComment, deleteComment, showComments };
