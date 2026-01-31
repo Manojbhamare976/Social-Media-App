@@ -16,6 +16,9 @@ async function createComment(req, res) {
 
   try {
     await comment.save();
+    await Post.findByIdAndUpdate(postId, {
+      $push: { comments: comment._id },
+    });
     res.json("Comment saved successfully");
   } catch (err) {
     return res.json(err.message);
