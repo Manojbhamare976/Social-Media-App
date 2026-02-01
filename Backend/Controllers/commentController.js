@@ -44,7 +44,6 @@ async function showComments(req, res) {
   if (!post) {
     return res.status(400).json({ msg: "post not found" });
   }
-  console.log(post.comments);
   return res.json(post.comments);
 }
 
@@ -58,9 +57,27 @@ async function reply(req, res) {
     post: postId,
     text: replyText,
   });
-
-  comment.reply.push(reply);
+  await reply.save();
+  comment.reply.push(reply._id);
   await comment.save();
+  return res.json({ msg: "Reply created" });
 }
 
-export { createComment, deleteComment, showComments, reply };
+async function showReply(req, res) {
+  try {
+    let { commentId } = req.query;
+
+    let comment = await Comment.findById(commentId).populate("reply");
+
+    if (!comment) {
+      return res.status(404).json({ msg: "comment not found" });
+    }
+
+    return res.json(comment.reply);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+export { createComment, deleteComment, showComments, reply, showReply };
