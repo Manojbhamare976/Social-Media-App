@@ -48,4 +48,19 @@ async function showComments(req, res) {
   return res.json(post.comments);
 }
 
-export { createComment, deleteComment, showComments };
+async function reply(req, res) {
+  let { userId } = req.user;
+  let { commentId, replyText, postId } = req.body;
+
+  let comment = await Comment.findById(commentId);
+  let reply = new Comment({
+    author: userId,
+    post: postId,
+    text: replyText,
+  });
+
+  comment.reply.push(reply);
+  await comment.save();
+}
+
+export { createComment, deleteComment, showComments, reply };
