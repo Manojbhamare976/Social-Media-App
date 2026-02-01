@@ -12,8 +12,10 @@ export default function CreateComment({ postId }) {
           postId: postId,
         },
       });
-      console.log(comment);
-      setComments([...comments, comment]);
+      console.log(comment.data);
+      console.log(comment.data.map((c) => c.text));
+      // let data = comment.data.map((c) => c.text);
+      setComments(comment.data);
     }
     showComments();
   }, []);
@@ -26,9 +28,9 @@ export default function CreateComment({ postId }) {
 
   return (
     <>
-      {comments?.map((c) => {
-        <div>{c.text}</div>;
-      })}
+      {comments?.map((c) => (
+        <p key={c._id}>{c.text}</p>
+      ))}
 
       <form>
         <input
