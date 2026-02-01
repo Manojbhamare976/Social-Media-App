@@ -6,6 +6,8 @@ export default function CreateComment({ postId }) {
   let [commentText, setCommentText] = useState({ text: "" });
   let [activeReplyCommentId, setActiveReplyCommentId] = useState(null);
   let [replyTextByComment, setReplyTextByComment] = useState({});
+  let [repliesByComment, setRepliesByComment] = useState({});
+  let [openRepliesCommentId, setOpenRepliesCommentId] = useState(null);
 
   useEffect(() => {
     async function showComments() {
@@ -17,7 +19,7 @@ export default function CreateComment({ postId }) {
       setComments(comment.data);
     }
     showComments();
-  }, []);
+  }, [postId]);
 
   async function createComment(e) {
     e.preventDefault();
@@ -35,11 +37,43 @@ export default function CreateComment({ postId }) {
     });
   }
 
+  async function getReplies(commentId) {
+    let res = await api.get("/comment/showreply", {
+      params: { commentId },
+    });
+
+    setRepliesByComment((prev) => ({
+      ...prev,
+      [commentId]: res.data,
+    }));
+  }
+
   return (
     <>
       {comments.map((c) => (
         <div key={c._id}>
           <p>{c.text}</p>
+          {c.reply?.length > 0 && (
+            <button
+              onClick={() => {
+                if (openRepliesCommentId === c._id) {
+                  setOpenRepliesCommentId(null);
+                  return;
+                }
+
+                setOpenRepliesCommentId(c._id);
+
+                if (!repliesByComment[c._id]) {
+                  getReplies(c._id);
+                }
+              }}
+            >
+              Show replies ({c.reply.length})
+            </button>
+          )}
+
+          {openRepliesCommentId === c._id &&
+            repliesByComment[c._id]?.map((r) => <p key={r._id}>{r.text}</p>)}
 
           <p
             style={{ cursor: "pointer", color: "white" }}
