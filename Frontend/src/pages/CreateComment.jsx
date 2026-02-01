@@ -4,6 +4,8 @@ import api from "../api/axiosUserClient";
 export default function CreateComment({ postId }) {
   let [comments, setComments] = useState([]);
   let [commentText, setCommentText] = useState({ text: "" });
+  let [activeReplyCommentId, setActiveReplyCommentId] = useState(null);
+  let [replyTextByComment, setReplyTextByComment] = useState({});
 
   useEffect(() => {
     async function showComments() {
@@ -12,9 +14,6 @@ export default function CreateComment({ postId }) {
           postId: postId,
         },
       });
-      console.log(comment.data);
-      console.log(comment.data.map((c) => c.text));
-      // let data = comment.data.map((c) => c.text);
       setComments(comment.data);
     }
     showComments();
@@ -26,10 +25,55 @@ export default function CreateComment({ postId }) {
     await api.post("/comment/create", { postId: postId, text: text });
   }
 
+  async function reply(e, commentId, postId) {
+    e.preventDefault();
+    let replyText = replyTextByComment[commentId];
+    await api.post("/comment/reply", {
+      commentId,
+      replyText,
+      postId,
+    });
+  }
+
   return (
     <>
-      {comments?.map((c) => (
-        <p key={c._id}>{c.text}</p>
+      {comments.map((c) => (
+        <div key={c._id}>
+          <p>{c.text}</p>
+
+          <p
+            style={{ cursor: "pointer", color: "white" }}
+            onClick={() =>
+              setActiveReplyCommentId(
+                activeReplyCommentId === c._id ? null : c._id,
+              )
+            }
+          >
+            Reply
+          </p>
+
+          {activeReplyCommentId === c._id && (
+            <form
+              onSubmit={(e) => {
+                reply(e, c._id, c.post);
+              }}
+            >
+              <input
+                type="text"
+                placeholder="write reply"
+                value={replyTextByComment[c._id] || ""}
+                onChange={(e) =>
+                  setReplyTextByComment({
+                    ...replyTextByComment,
+                    [c._id]: e.target.value,
+                  })
+                }
+              />
+
+              <button type="submit">reply</button>
+            </form>
+          )}
+        </div>
       ))}
 
       <form>
