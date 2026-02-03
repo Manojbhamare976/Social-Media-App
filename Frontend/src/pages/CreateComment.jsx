@@ -48,11 +48,26 @@ export default function CreateComment({ postId }) {
     }));
   }
 
+  async function deleteComment(commentId) {
+    try {
+      await api.delete(`/comment/delete/${commentId}`);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <>
       {comments.map((c) => (
         <div key={c._id}>
           <p>{c.text}</p>
+          <button
+            onClick={() => {
+              deleteComment(c._id);
+            }}
+          >
+            Delete comment
+          </button>
           {c.reply?.length > 0 && (
             <button
               onClick={() => {
@@ -73,7 +88,18 @@ export default function CreateComment({ postId }) {
           )}
 
           {openRepliesCommentId === c._id &&
-            repliesByComment[c._id]?.map((r) => <p key={r._id}>{r.text}</p>)}
+            repliesByComment[c._id]?.map((r) => (
+              <div key={r._id}>
+                <p>{r.text}</p>
+                <button
+                  onClick={() => {
+                    deleteComment(r._id);
+                  }}
+                >
+                  Delete comment
+                </button>
+              </div>
+            ))}
 
           <p
             style={{ cursor: "pointer", color: "white" }}
