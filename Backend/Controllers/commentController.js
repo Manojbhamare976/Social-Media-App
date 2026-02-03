@@ -39,6 +39,12 @@ async function deleteComment(req, res) {
         await Comment.findByIdAndDelete(id);
       });
     }
+
+    await Comment.updateMany(
+      { reply: commentId },
+      { $pull: { reply: commentId } },
+    );
+
     await comment.deleteOne({});
     res.json({ msg: "comment deleted succesfully" });
   } else {
