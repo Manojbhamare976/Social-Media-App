@@ -26,13 +26,21 @@ async function createComment(req, res) {
 }
 
 async function deleteComment(req, res) {
-  let { commentId } = req.body;
+  let { userId } = req.user;
+  let { commentId } = req.params;
   let comment = await Comment.findById(commentId);
   if (!comment) {
     return res.status(404).json("Couldn't find comment");
   }
-  if (comment.author == req.cookies.userId) {
-    return await comment.deleteOne({});
+
+  if (comment.author == userId) {
+    if (comment.reply.length > 0) {
+      comment.reply.map(async (id) => {
+        await Comment.findByIdAndDelete(id);
+      });
+    }
+    await comment.deleteOne({});
+    res.json({ msg: "comment deleted succesfully" });
   } else {
     return res.status(404).json("User not found");
   }
