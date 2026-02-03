@@ -26,29 +26,40 @@ async function createComment(req, res) {
 }
 
 async function deleteComment(req, res) {
-  let { userId } = req.user;
-  let { commentId } = req.params;
-  let comment = await Comment.findById(commentId);
-  if (!comment) {
-    return res.status(404).json("Couldn't find comment");
-  }
+  const { userId } = req.user;
+  const { commentId } = req.params;
 
-  if (comment.author == userId) {
-    if (comment.reply.length > 0) {
-      comment.reply.map(async (id) => {
-        await Comment.findByIdAndDelete(id);
-      });
+  try {
+    const comment = await Comment.findById(commentId);
+
+    if (!comment) {
+      return res.status(404).json("Couldn't find comment");
     }
 
+    if (comment.author.toString() !== userId) {
+      return res.status(403).json("Not authorized");
+    }
+
+    //Remove the comment from any parent reply array
     await Comment.updateMany(
       { reply: commentId },
       { $pull: { reply: commentId } },
     );
 
-    await comment.deleteOne({});
-    res.json({ msg: "comment deleted succesfully" });
-  } else {
-    return res.status(404).json("User not found");
+    //If this comment has replies, delete them
+    if (comment.reply.length > 0) {
+      await Comment.deleteMany({
+        _id: { $in: comment.reply },
+      });
+    }
+
+    //Delete the comment itself
+    await Comment.findByIdAndDelete(commentId);
+
+    return res.json({ msg: "comment deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(err.message);
   }
 }
 
