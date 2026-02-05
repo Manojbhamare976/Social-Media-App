@@ -176,7 +176,7 @@ async function authenticateUser(req, res, next) {
   const token = req.cookies.accessToken;
 
   if (!token) {
-    return res.status(403).json({ msg: "Invalid token" });
+    return res.status(401).json({ msg: "Unauthorized" });
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
