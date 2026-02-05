@@ -4,9 +4,11 @@ import {
   deletePost,
   getPost,
 } from "../Controllers/postController.js";
+import { authenticateUser } from "../Controllers/userAuth.js";
+import upload from "../Middlewares/upload.js";
 const router = express.Router();
 
-router.post("/create", createPost);
+router.post("/create", authenticateUser, upload.array("content"), createPost);
 router.delete("/delete", deletePost);
 router.get("/find", getPost);
 
