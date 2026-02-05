@@ -1,17 +1,28 @@
 import Post from "../Models/post.js";
 
 async function createPost(req, res) {
-  let { user, caption, content } = req.body;
-  let post = new Post({
-    user: user,
-    caption: caption,
-    content: content,
-  });
   try {
-    await post.save().then(console.log("post saved succesfully"));
+    let { userId } = req.user;
+    let { caption } = req.body;
+
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json("Please upload image or video");
+    }
+
+    const content = req.files.map((file) => file.path);
+
+    let post = new Post({
+      user: userId,
+      caption: caption,
+      content: content, // only URLs
+    });
+
+    await post.save();
+    console.log("post saved successfully");
     res.json(post);
   } catch (err) {
     console.log(err);
+    res.status(500).json("Post creation failed");
   }
 }
 
@@ -19,7 +30,7 @@ async function deletePost(req, res) {
   let { _id } = req.body;
   const postToBeDeleted = await Post.findByIdAndDelete(_id);
   if (postToBeDeleted) {
-    return res.status(500).json("Post deleted successfully");
+    return res.status(200).json("Post deleted successfully");
   } else {
     return console.log("Post not found");
   }
