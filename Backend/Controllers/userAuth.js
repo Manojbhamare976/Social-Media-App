@@ -114,6 +114,12 @@ async function logout(req, res) {
       sameSite: "strict",
     });
 
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+    });
+
     return res.status(200).json({
       message: "Logout successful",
     });
