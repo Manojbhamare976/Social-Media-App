@@ -20,20 +20,21 @@ async function signup(req, res) {
 
     let hashedPassword = await bcrypt.hash(password, 10);
 
+    const existingUser = await User.findOne({
+      $or: [{ email }, { username }],
+    });
+
+    if (existingUser) {
+      return res.status(409).json({ msg: "User already exists" });
+    }
+
     let user = new User({
       username: username,
       email: email,
       password: hashedPassword,
     });
 
-    await user
-      .save()
-      .then(() => {
-        console.log("User created successfully");
-      })
-      .catch((err) => {
-        return console.log(err.message);
-      });
+    await user.save();
 
     const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "15m",
@@ -52,7 +53,7 @@ async function signup(req, res) {
       accessToken,
     });
   } catch (err) {
-    return console.log(err.message);
+    return res.status(500).json({ msg: err.message });
   }
 }
 
