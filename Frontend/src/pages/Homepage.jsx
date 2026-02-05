@@ -96,7 +96,14 @@ export default function Homepage() {
           ) : (
             <button onClick={() => followUser(p.user._id)}>Follow</button>
           )}
-          <p>{p.content}</p>
+          {p.content.map((url, i) =>
+            url.includes("video") ? (
+              <video key={i} src={url} controls width="300" />
+            ) : (
+              <img key={i} src={url} width="300" />
+            ),
+          )}
+          <p>{p.caption}</p>
           <button
             onClick={async () => {
               let result = await isliked(p._id);
