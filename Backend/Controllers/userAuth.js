@@ -167,7 +167,7 @@ async function refresh(req, res) {
 }
 
 const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 100,
+  windowMs: 15 * 60 * 1000,
   max: 10,
   message: "Too many login attempts",
 });
