@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import api from "../api/axiosUserClient";
+import { useSearchParams } from "react-router-dom";
 
-export default function CreateComment({ postId }) {
+export default function CreateComment() {
   let [comments, setComments] = useState([]);
   let [commentText, setCommentText] = useState({ text: "" });
   let [activeReplyCommentId, setActiveReplyCommentId] = useState(null);
   let [replyTextByComment, setReplyTextByComment] = useState({});
   let [repliesByComment, setRepliesByComment] = useState({});
   let [openRepliesCommentId, setOpenRepliesCommentId] = useState(null);
-
+  const [searchParams] = useSearchParams();
+  const postId = searchParams.get("postId");
+  console.log(postId);
   useEffect(() => {
     async function showComments() {
       let comment = await api.get("/comment/comments", {
