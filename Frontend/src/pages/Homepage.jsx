@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../api/axiosUserClient";
 import { Heart, MessageCircle, Share, Bookmark } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 export default function Homepage() {
+  const navigate = useNavigate();
   let [posts, setPosts] = useState([]);
   let [followMap, setFollowMap] = useState({});
 
@@ -116,7 +117,17 @@ export default function Homepage() {
           >
             <Heart />
           </button>
-          <MessageCircle />
+          <button
+            onClick={() => {
+              navigate({
+                pathname: "/comment",
+                search: `?postId=${p._id}`,
+                replace: true,
+              });
+            }}
+          >
+            <MessageCircle />
+          </button>
           <button
             onClick={async () => {
               let result = await isSaved(p._id);
