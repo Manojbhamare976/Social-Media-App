@@ -94,4 +94,18 @@ async function decreaseFollowers(req, res) {
   }
 }
 
-export { increaseFollowers, decreaseFollowers, isFollowing };
+async function findUser(req, res) {
+  try {
+    let { username } = req.query;
+    console.log(username);
+    let user = await User.findOne({ username: username });
+    if (!user) {
+      return res.json({ msg: "user not found" });
+    }
+    return res.json({ user });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+export { increaseFollowers, decreaseFollowers, isFollowing, findUser };
