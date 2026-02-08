@@ -68,17 +68,26 @@ async function decreaseFollowers(req, res) {
       return res.status(404).json({ msg: "User not found" });
     }
 
-    userToUnfollow.followers = userToUnfollow.followers.filter(
-      (id) => id.toString() !== userId,
-    );
-    userToUnfollow.followersCount -= 1;
+    if (userId !== userid) {
+      userToUnfollow.followers = userToUnfollow.followers.filter(
+        (id) => id.toString() !== userId,
+      );
+      userToUnfollow.followersCount -= 1;
 
-    user.following = user.following.filter((id) => id.toString() !== userid);
-    user.followingCount -= 1;
+      user.following = user.following.filter((id) => id.toString() !== userid);
+      user.followingCount -= 1;
 
-    await userToUnfollow.save();
-    await user.save();
+      await userToUnfollow.save();
+      await user.save();
+    } else if (userId == userid) {
+      user.followers = user.followers.filter((id) => id.toString() !== userId);
+      user.followersCount -= 1;
 
+      user.following = user.following.filter((id) => id.toString() !== userid);
+      user.followingCount -= 1;
+
+      await user.save();
+    }
     return res.json({ msg: "Unfollowed successfully" });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
