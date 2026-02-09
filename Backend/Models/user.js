@@ -40,6 +40,16 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    createdPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
+    createdPostsCount: {
+      type: Number,
+      default: 0,
+    },
     likedPosts: [
       {
         type: mongoose.Schema.Types.ObjectId,
