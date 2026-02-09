@@ -22,7 +22,13 @@ export default function Sidebar() {
       >
         <Search />
       </button>
-      <Plus />
+      <button
+        onClick={() => {
+          navigate("/post/create");
+        }}
+      >
+        <Plus />
+      </button>
       <CircleUserRound />
       <Menu />
       <AppRoutes />
