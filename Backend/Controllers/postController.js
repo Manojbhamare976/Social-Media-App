@@ -1,9 +1,16 @@
 import Post from "../Models/post.js";
+import User from "../Models/user.js";
 
 async function createPost(req, res) {
   try {
     let { userId } = req.user;
     let { caption } = req.body;
+
+    let user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ msg: "user not found" });
+    }
 
     if (!req.files || req.files.length === 0) {
       return res.status(400).json("Please upload image or video");
@@ -18,6 +25,12 @@ async function createPost(req, res) {
     });
 
     await post.save();
+
+    user.createdPosts.push(post._id);
+    user.createdPostsCount += 1;
+
+    await user.save();
+
     console.log("post saved successfully");
     res.json(post);
   } catch (err) {
