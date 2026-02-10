@@ -15,6 +15,9 @@ const postSchema = new mongoose.Schema(
     publicId: {
       type: [String],
     },
+    resourceType: {
+      type: [String],
+    },
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,
