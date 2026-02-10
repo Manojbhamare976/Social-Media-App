@@ -9,7 +9,7 @@ import upload from "../Middlewares/upload.js";
 const router = express.Router();
 
 router.post("/create", authenticateUser, upload.array("content"), createPost);
-router.delete("/delete", deletePost);
+router.delete("/delete/:postId", authenticateUser, deletePost);
 router.get("/find", getPost);
 
 export default router;
