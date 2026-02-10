@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import express from "express";
 import cors from "cors";
 import postRoutes from "./Routes/postRoutes.js";
@@ -6,11 +8,9 @@ import commentRoutes from "./Routes/commentRoutes.js";
 import userprofileRoutes from "./Routes/userRoutes.js";
 import likeRoutes from "./Routes/likeRoutes.js";
 import saveRoutes from "./Routes/saveRoutes.js";
-import dotenv from "dotenv";
 import connectDB from "./db.js";
 import cookieParser from "cookie-parser";
 
-dotenv.config();
 //DB connection
 connectDB();
 
