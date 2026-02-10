@@ -18,12 +18,14 @@ async function createPost(req, res) {
 
     const content = req.files.map((file) => file.path);
     const publicId = req.files.map((file) => file.filename);
+    const resourceType = req.files.map((file) => file.resource_type);
 
     let post = new Post({
       user: userId,
       caption: caption,
       content: content, // only URLs
       publicId: publicId, //public id
+      resourceType: resourceType,
     });
 
     await post.save();
