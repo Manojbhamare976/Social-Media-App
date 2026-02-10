@@ -18,7 +18,9 @@ async function createPost(req, res) {
 
     const content = req.files.map((file) => file.path);
     const publicId = req.files.map((file) => file.filename);
-    const resourceType = req.files.map((file) => file.resource_type);
+    const resourceType = req.files.map((file) => {
+      file.mimetype.startsWith("video") ? "video" : "image";
+    });
 
     let post = new Post({
       user: userId,
