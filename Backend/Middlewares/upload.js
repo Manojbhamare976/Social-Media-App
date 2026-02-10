@@ -5,15 +5,9 @@ import cloudinary from "../config/cloudinary.js";
 const storage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
-    let resourceType = "image";
-
-    if (file.mimetype.startsWith("video")) {
-      resourceType = "video";
-    }
-
     return {
       folder: "mern-social-posts",
-      resource_type: resourceType,
+      resource_type: "auto",
     };
   },
 });
