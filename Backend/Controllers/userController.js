@@ -108,4 +108,23 @@ async function findUser(req, res) {
   }
 }
 
-export { increaseFollowers, decreaseFollowers, isFollowing, findUser };
+async function findUserById(req, res) {
+  try {
+    let { userId } = req.user;
+    let user = await User.findById(userId).populate("createdPosts");
+    if (!user) {
+      return res.status(404).json({ msg: "user not found" });
+    }
+    return res.json(user);
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+export {
+  increaseFollowers,
+  decreaseFollowers,
+  isFollowing,
+  findUser,
+  findUserById,
+};
