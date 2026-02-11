@@ -29,7 +29,13 @@ export default function Sidebar() {
       >
         <Plus />
       </button>
-      <CircleUserRound />
+      <button
+        onClick={() => {
+          navigate("/userprofile/user");
+        }}
+      >
+        <CircleUserRound />
+      </button>
       <Menu />
       <AppRoutes />
     </>
