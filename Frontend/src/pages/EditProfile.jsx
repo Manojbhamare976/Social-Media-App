@@ -28,18 +28,29 @@ export default function EditProfile() {
     }
   }
 
+  async function removeProfilePic() {
+    try {
+      await api.patch("/userprofile/remove/profilepic");
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
   return (
-    <form onSubmit={updateProfile}>
-      <input type="file" accept="image/*" onChange={handleFileChange} />
+    <div>
+      <form onSubmit={updateProfile}>
+        <input type="file" accept="image/*" onChange={handleFileChange} />
 
-      <input
-        type="text"
-        placeholder="Update bio"
-        value={bio}
-        onChange={(e) => setBio(e.target.value)}
-      />
+        <input
+          type="text"
+          placeholder="Update bio"
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+        />
 
-      <button type="submit">update profile</button>
-    </form>
+        <button type="submit">update profile</button>
+      </form>
+      <button onClick={removeProfilePic}>Remove current profile pic</button>
+    </div>
   );
 }
