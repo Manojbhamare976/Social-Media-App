@@ -1,14 +1,16 @@
 import "./App.css";
-import Homepage from "./pages/Homepage.jsx";
-import CreateComment from "./pages/CreateComment.jsx";
-import CreatePost from "./pages/CreatePost.jsx";
+import Sidebar from "./homepage-components/Sidebar.jsx";
+import Login from "./userAuth/Login.jsx";
+import Signup from "./userAuth/Signup.jsx";
+import Logout from "./userAuth/Logout.jsx";
 
 function App() {
   return (
     <>
-      <CreatePost />
-      <Homepage />
-      <CreateComment postId={"697b8dfa5e3494282d76eb3e"} />
+      <Signup />
+      <Login />
+      <Logout />
+      <Sidebar />
     </>
   );
 }
