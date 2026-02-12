@@ -5,6 +5,7 @@ import {
   decreaseFollowers,
   findUser,
   findUserById,
+  updateProfile,
 } from "../Controllers/userController.js";
 import { authenticateUser } from "../Controllers/userAuth.js";
 const router = express.Router();
@@ -14,5 +15,5 @@ router.get("/isfollowing", authenticateUser, isFollowing);
 router.put("/decrease/followers", authenticateUser, decreaseFollowers);
 router.get("/find/user", authenticateUser, findUser);
 router.get("/user", authenticateUser, findUserById);
-
+router.patch("/update/profile", authenticateUser, updateProfile);
 export default router;
