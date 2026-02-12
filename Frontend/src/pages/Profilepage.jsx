@@ -67,7 +67,12 @@ export default function Userprofile() {
     <>
       {result && (
         <div>
-          <img src={result.profilePic} alt="no profile image" />
+          <img
+            src={result.profilePic}
+            width={200}
+            height={200}
+            alt="no profile image"
+          />
           <p>{result.username}</p>
           <p>{result.bio}</p>
           <p>{result.createdPostsCount}</p>
@@ -76,6 +81,13 @@ export default function Userprofile() {
           <p>followers</p>
           <p>{result.followingCount}</p>
           <p>following</p>
+          <button
+            onClick={() => {
+              navigate("/userprofile/update");
+            }}
+          >
+            Edit Profile
+          </button>
           {result.createdPostsCount > 0 ? (
             <div>
               {result.createdPosts.map((post, i) => (
