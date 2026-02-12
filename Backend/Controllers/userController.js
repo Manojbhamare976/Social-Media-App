@@ -172,6 +172,32 @@ async function updateProfile(req, res) {
   }
 }
 
+async function removeProfilePic(req, res) {
+  const DEFAULT_PROFILE_PIC_ID = "default-profile-pic_b7lphh";
+  const DEFAULT_PROFILE_PIC_URL =
+    "https://res.cloudinary.com/dbapy9guo/image/upload/v1770889883/default-profile-pic_b7lphh.jpg";
+  try {
+    let { userId } = req.user;
+
+    let user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ msg: "user not found" });
+    }
+
+    if (user.profilePicPublicId == DEFAULT_PROFILE_PIC_ID) {
+      return res.json({ msg: "Cannot change default profile picture" });
+    }
+
+    await cloudinary.uploader.destroy(user.profilePicPublicId);
+    user.profilePicPublicId = DEFAULT_PROFILE_PIC_ID;
+    user.profilePic = DEFAULT_PROFILE_PIC_URL;
+    await user.save();
+    return res.status(200).json({ msg: "Profile pic removed successfully" });
+  } catch (err) {
+    return res.status(400).json({ msg: err.message });
+  }
+}
+
 export {
   increaseFollowers,
   decreaseFollowers,
@@ -179,4 +205,5 @@ export {
   findUser,
   findUserById,
   updateProfile,
+  removeProfilePic,
 };
