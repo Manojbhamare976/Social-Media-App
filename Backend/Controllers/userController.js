@@ -1,4 +1,5 @@
 import User from "../Models/user.js";
+import { v2 as cloudinary } from "cloudinary";
 
 async function increaseFollowers(req, res) {
   let { userId } = req.user; //logged in user
@@ -121,10 +122,61 @@ async function findUserById(req, res) {
   }
 }
 
+async function updateProfile(req, res) {
+  const DEFAULT_PROFILE_PIC_ID = "default-profile-pic_b7lphh";
+  try {
+    const { userId } = req.user;
+    const { profilePic, bio } = req.body;
+
+    if (!profilePic && !bio) {
+      return res.status(400).json({ msg: "Nothing to update" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ msg: "User not found" });
+
+    let updateData = {};
+    if (bio) updateData.bio = bio;
+
+    if (profilePic) {
+      if (
+        user.profilePicPublicId &&
+        user.profilePicPublicId !== DEFAULT_PROFILE_PIC_ID
+      ) {
+        await cloudinary.uploader.destroy(user.profilePicPublicId);
+        console.log("Deleted old user-specific photo");
+      } else {
+        console.log("Preserving default system photo");
+      }
+
+      const uploadRes = await cloudinary.uploader.upload(profilePic, {
+        folder: "mern-social-posts/profile_pics",
+        transformation: [{ width: 400, height: 400, crop: "fill" }],
+      });
+
+      updateData.profilePic = uploadRes.secure_url;
+      updateData.profilePicPublicId = uploadRes.public_id;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    });
+
+    return res.status(200).json({
+      msg: "Profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
 export {
   increaseFollowers,
   decreaseFollowers,
   isFollowing,
   findUser,
   findUserById,
+  updateProfile,
 };
