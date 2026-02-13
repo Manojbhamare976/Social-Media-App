@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
 import api from "../api/axiosUserClient";
-import { Heart, MessageCircle, Share, Bookmark } from "lucide-react";
+import { Heart, MessageCircle, Bookmark } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useInView } from "react-intersection-observer";
+
 export default function Homepage() {
   const navigate = useNavigate();
   let [posts, setPosts] = useState([]);
   let [followMap, setFollowMap] = useState({});
+  let [sortedPosts, setSortedPosts] = useState([]);
+
+  // how many posts to show
+  const [visibleCount, setVisibleCount] = useState(5);
+
+  const { ref, inView } = useInView({
+    rootMargin: "300px",
+  });
 
   useEffect(() => {
     async function getPosts() {
       const postRes = await api.get("/post/find");
-      console.log(postRes);
       setPosts(postRes.data);
 
       // check follow status for each post user
@@ -27,6 +36,23 @@ export default function Homepage() {
     }
     getPosts();
   }, []);
+
+  useEffect(() => {
+    const sorted = [...posts].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+    );
+
+    setSortedPosts(sorted);
+  }, [posts]);
+
+  //the infinite scroll trigger
+  useEffect(() => {
+    if (!inView) return;
+
+    if (visibleCount >= sortedPosts.length) return;
+
+    setVisibleCount((prev) => prev + 5);
+  }, [inView]);
 
   //follow user function
   async function followUser(userid) {
@@ -88,7 +114,7 @@ export default function Homepage() {
 
   return (
     <>
-      {posts?.map((p) => (
+      {sortedPosts?.slice(0, visibleCount).map((p) => (
         <div key={p._id}>
           <p>{p.user.username}</p>
 
@@ -142,6 +168,8 @@ export default function Homepage() {
           </button>
         </div>
       ))}
+
+      <div ref={ref} style={{ height: 1 }} />
     </>
   );
 }
