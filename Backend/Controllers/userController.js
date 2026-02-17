@@ -122,6 +122,20 @@ async function findUserById(req, res) {
   }
 }
 
+async function findUserProfile(req, res) {
+  try {
+    let { userId } = req.params;
+    console.log(userId);
+    let user = await User.findById(userId).populate("createdPosts");
+    if (!user) {
+      return res.status(404).json({ msg: "user not found" });
+    }
+    return res.json(user);
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
 async function updateProfile(req, res) {
   const DEFAULT_PROFILE_PIC_ID = "default-profile-pic_b7lphh";
   try {
@@ -206,4 +220,5 @@ export {
   findUserById,
   updateProfile,
   removeProfilePic,
+  findUserProfile,
 };
