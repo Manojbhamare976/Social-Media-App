@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../api/axiosUserClient";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 export default function CreateComment() {
+  const navigate = useNavigate();
   let [comments, setComments] = useState([]);
   let [commentText, setCommentText] = useState({ text: "" });
   let [activeReplyCommentId, setActiveReplyCommentId] = useState(null);
@@ -63,7 +64,17 @@ export default function CreateComment() {
     <>
       {comments.map((c) => (
         <div key={c._id}>
-          <p>{c.author?.username}</p>
+          <p
+            onClick={() => {
+              navigate({
+                pathname: "/userprofile",
+                search: `?userId=${c.author?._id}`,
+                replace: true,
+              });
+            }}
+          >
+            {c.author?.username}
+          </p>
           <p>{c.text}</p>
           <button
             onClick={() => {
@@ -94,7 +105,17 @@ export default function CreateComment() {
           {openRepliesCommentId === c._id &&
             repliesByComment[c._id]?.map((r) => (
               <div key={r._id}>
-                <p>{r.author?.username}</p>
+                <p
+                  onClick={() => {
+                    navigate({
+                      pathname: "/userprofile",
+                      search: `?userId=${r.author?._id}`,
+                      replace: true,
+                    });
+                  }}
+                >
+                  {r.author?.username}
+                </p>
                 <p>{r.text}</p>
                 <button
                   onClick={() => {
