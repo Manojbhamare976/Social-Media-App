@@ -65,7 +65,10 @@ async function deleteComment(req, res) {
 
 async function showComments(req, res) {
   let { postId } = req.query;
-  let post = await Post.findById(postId).populate("comments");
+  let post = await Post.findById(postId).populate({
+    path: "comments",
+    populate: { path: "author" },
+  });
   if (!post) {
     return res.status(400).json({ msg: "post not found" });
   }
@@ -92,7 +95,12 @@ async function showReply(req, res) {
   try {
     let { commentId } = req.query;
 
-    let comment = await Comment.findById(commentId).populate("reply");
+    let comment = await Comment.findById(commentId).populate({
+      path: "reply",
+      populate: {
+        path: "author",
+      },
+    });
 
     if (!comment) {
       return res.status(404).json({ msg: "comment not found" });
