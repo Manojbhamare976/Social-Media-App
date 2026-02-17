@@ -116,7 +116,17 @@ export default function Homepage() {
     <>
       {sortedPosts?.slice(0, visibleCount).map((p) => (
         <div key={p._id}>
-          <p>{p.user.username}</p>
+          <p
+            onClick={() => {
+              navigate({
+                pathname: "/userprofile",
+                search: `?userId=${p.user._id}`,
+                replace: true,
+              });
+            }}
+          >
+            {p.user.username}
+          </p>
 
           {followMap[p.user._id] ? (
             <button onClick={() => unfollowUser(p.user._id)}>Unfollow</button>
