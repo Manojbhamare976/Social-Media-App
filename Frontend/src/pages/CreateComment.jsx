@@ -63,6 +63,7 @@ export default function CreateComment() {
     <>
       {comments.map((c) => (
         <div key={c._id}>
+          <p>{c.author?.username}</p>
           <p>{c.text}</p>
           <button
             onClick={() => {
@@ -93,6 +94,7 @@ export default function CreateComment() {
           {openRepliesCommentId === c._id &&
             repliesByComment[c._id]?.map((r) => (
               <div key={r._id}>
+                <p>{r.author?.username}</p>
                 <p>{r.text}</p>
                 <button
                   onClick={() => {
