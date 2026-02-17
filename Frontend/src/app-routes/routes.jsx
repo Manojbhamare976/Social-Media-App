@@ -4,6 +4,7 @@ import CreateComment from "../pages/CreateComment.jsx";
 import SearchUser from "../pages/Search.jsx";
 import Userprofile from "../pages/Profilepage.jsx";
 import EditProfile from "../pages/EditProfile.jsx";
+import UserProfile from "../pages/UserProfile.jsx";
 
 const routes = [
   { path: "/", element: <Homepage /> },
@@ -12,6 +13,7 @@ const routes = [
   { path: "/find/user", element: <SearchUser /> },
   { path: "/userprofile/user", element: <Userprofile /> },
   { path: "/userprofile/update", element: <EditProfile /> },
+  { path: "/userprofile", element: <UserProfile /> },
 ];
 
 export default routes;
