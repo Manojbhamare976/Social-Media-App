@@ -5,6 +5,8 @@ import SearchUser from "../pages/Search.jsx";
 import Userprofile from "../pages/Profilepage.jsx";
 import EditProfile from "../pages/EditProfile.jsx";
 import UserProfile from "../pages/UserProfile.jsx";
+import Signup from "../userAuth/Signup.jsx";
+import Login from "../userAuth/Login.jsx";
 
 const routes = [
   { path: "/", element: <Homepage /> },
@@ -14,6 +16,8 @@ const routes = [
   { path: "/userprofile/user", element: <Userprofile /> },
   { path: "/userprofile/update", element: <EditProfile /> },
   { path: "/userprofile", element: <UserProfile /> },
+  { path: "/signup", element: <Signup /> },
+  { path: "/login", element: <Login /> },
 ];
 
 export default routes;
