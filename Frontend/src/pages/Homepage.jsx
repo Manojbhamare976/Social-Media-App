@@ -116,7 +116,7 @@ export default function Homepage() {
     <>
       {sortedPosts?.slice(0, visibleCount).map((p) => (
         <div key={p._id}>
-          <p
+          <div
             onClick={() => {
               navigate({
                 pathname: "/userprofile",
@@ -125,9 +125,14 @@ export default function Homepage() {
               });
             }}
           >
-            {p.user.username}
-          </p>
-
+            <img
+              src={p.user.profilePic}
+              width={50}
+              height={50}
+              alt="no profile image"
+            />
+            <p>{p.user.username}</p>
+          </div>
           {followMap[p.user._id] ? (
             <button onClick={() => unfollowUser(p.user._id)}>Unfollow</button>
           ) : (
