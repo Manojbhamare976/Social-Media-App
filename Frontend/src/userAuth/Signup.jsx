@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../api/axiosUserClient.js";
 import { Link } from "react-router-dom";
-
+import "./Signup.css";
 export default function Signup() {
   let [formData, setFormData] = useState({
     username: "",
@@ -62,9 +62,11 @@ export default function Signup() {
 
   return (
     <>
-      <div>
-        <form onSubmit={submitForm}>
+      <div className="form-container">
+        <h1 className="montserrat-signup-text">Signup</h1>
+        <form className="signup-form" onSubmit={submitForm}>
           <input
+            className="signup-form-input poppins-medium"
             value={formData.username}
             name="username"
             type="text"
@@ -73,8 +75,11 @@ export default function Signup() {
               setFormData({ ...formData, [e.target.name]: e.target.value });
             }}
           />
-          {usernameError.text.length > 0 ? <p>{usernameError.text}</p> : null}
+          {usernameError.text.length > 0 ? (
+            <p className="err-msg poppins-medium">{usernameError.text}</p>
+          ) : null}
           <input
+            className="signup-form-input poppins-medium"
             value={formData.email}
             name="email"
             type="email"
@@ -83,8 +88,11 @@ export default function Signup() {
               setFormData({ ...formData, [e.target.name]: e.target.value });
             }}
           />
-          {emailError.text.length > 0 ? <p>{emailError.text}</p> : null}
+          {emailError.text.length > 0 ? (
+            <p className="err-msg poppins-medium">{emailError.text}</p>
+          ) : null}
           <input
+            className="signup-form-input poppins-medium"
             value={formData.password}
             name="password"
             type="password"
@@ -93,25 +101,41 @@ export default function Signup() {
               setFormData({ ...formData, [e.target.name]: e.target.value });
             }}
           />
-          {passwordError.text.length > 0 ? <p>{passwordError.text}</p> : null}
-          {signedUp === true ? (
-            <button type="submit" disabled>
+          {passwordError.text.length > 0 ? (
+            <p className="err-msg poppins-medium">{passwordError.text}</p>
+          ) : null}
+          {signedUp ? (
+            <button
+              type="submit"
+              disabled
+              className="poppins-medium signup-button"
+            >
               Sign Up
             </button>
           ) : (
-            <button type="submit">Sign Up</button>
+            <button type="submit" className="poppins-medium signup-button">
+              Sign Up
+            </button>
           )}
 
           {signedUp ? (
-            <p>
-              signup successfull click here to{" "}
+            <p className="poppins-medium">
+              Signup successful. Click here to{" "}
               <Link to="/login" replace>
                 login
               </Link>
             </p>
           ) : null}
 
-          {error.text.length > 0 ? <p>{error.text}</p> : null}
+          {error.text.length > 0 ? (
+            <p className="err-msg poppins-medium">{error.text}</p>
+          ) : null}
+          <p className="poppins-medium">
+            Already have an account?{" "}
+            <Link to="/login" replace>
+              login
+            </Link>{" "}
+          </p>
         </form>
       </div>
     </>
