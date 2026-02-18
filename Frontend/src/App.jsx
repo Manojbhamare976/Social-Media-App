@@ -1,4 +1,3 @@
-import "./App.css";
 import Sidebar from "./homepage-components/Sidebar.jsx";
 import Login from "./userAuth/Login.jsx";
 import Signup from "./userAuth/Signup.jsx";
