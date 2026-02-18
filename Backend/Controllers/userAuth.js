@@ -61,10 +61,14 @@ async function login(req, res) {
   try {
     let { username, email, password } = req.body;
 
-    let user = await User.findOne({ $or: [{ username }, { email }] });
-
     if (!password || (!username && !email)) {
       return res.status(400).json({ msg: "Credentials missing" });
+    }
+
+    let user = await User.findOne({ username, email });
+
+    if (!user) {
+      return res.status(400).json({ msg: "Invalid credentials" });
     }
 
     let isPasswordMatched = await bcrypt.compare(password, user.password);
