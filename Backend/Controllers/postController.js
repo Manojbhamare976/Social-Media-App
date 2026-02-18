@@ -92,7 +92,11 @@ async function deletePost(req, res) {
 
 async function getPost(req, res) {
   try {
-    let post = await Post.find({}).populate("user", "username");
+    let post = await Post.find({}).populate({
+      path: "user",
+      select: "username profilePic",
+    });
+
     res.json(post);
   } catch (err) {
     console.log(err.message);
