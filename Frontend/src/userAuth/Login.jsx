@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/axiosUserClient.js";
 import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -70,9 +71,11 @@ export default function Login() {
 
   return (
     <>
-      <div>
-        <form onSubmit={submitForm}>
+      <div className="form-container">
+        <h1 className="montserrat-login-text">Login</h1>
+        <form className="login-form" onSubmit={submitForm}>
           <input
+            className="login-form-input poppins-medium"
             name="username"
             type="text"
             placeholder="Enter Username"
@@ -81,8 +84,11 @@ export default function Login() {
               setFormData({ ...formData, [e.target.name]: e.target.value });
             }}
           />
-          {usernameError.text.length > 0 ? <p>{usernameError.text}</p> : null}
+          {usernameError.text.length > 0 ? (
+            <p className="err-msg poppins-medium">{usernameError.text}</p>
+          ) : null}
           <input
+            className="login-form-input poppins-medium"
             name="email"
             type="email"
             placeholder="Enter email"
@@ -91,8 +97,11 @@ export default function Login() {
               setFormData({ ...formData, [e.target.name]: e.target.value });
             }}
           />
-          {emailError.text.length > 0 ? <p>{emailError.text}</p> : null}
+          {emailError.text.length > 0 ? (
+            <p className="err-msg poppins-medium">{emailError.text}</p>
+          ) : null}
           <input
+            className="login-form-input poppins-medium"
             name="password"
             type="password"
             placeholder="Enter password"
@@ -101,16 +110,26 @@ export default function Login() {
               setFormData({ ...formData, [e.target.name]: e.target.value });
             }}
           />
-          {passwordError.text.length > 0 ? <p>{passwordError.text}</p> : null}
-          {loggedIn === true ? (
-            <button type="submit" disabled>
+          {passwordError.text.length > 0 ? (
+            <p className="err-msg poppins-medium">{passwordError.text}</p>
+          ) : null}
+          {loggedIn ? (
+            <button
+              type="submit"
+              disabled
+              className="poppins-medium login-button"
+            >
               Login
             </button>
           ) : (
-            <button type="submit">Login</button>
+            <button type="submit" className="poppins-medium login-button">
+              Login
+            </button>
           )}
 
-          {error.text.length > 0 ? <p>{error.text}</p> : null}
+          {error.text.length > 0 ? (
+            <p className="err-msg poppins-medium">{error.text}</p>
+          ) : null}
         </form>
       </div>
     </>
