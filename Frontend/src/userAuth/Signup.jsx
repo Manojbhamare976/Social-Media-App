@@ -61,7 +61,7 @@ export default function Signup() {
   }
 
   return (
-    <>
+    <div className="signup-page">
       <div className="form-container">
         <h1 className="montserrat-signup-text">Signup</h1>
         <form className="signup-form" onSubmit={submitForm}>
@@ -138,6 +138,6 @@ export default function Signup() {
           </p>
         </form>
       </div>
-    </>
+    </div>
   );
 }
