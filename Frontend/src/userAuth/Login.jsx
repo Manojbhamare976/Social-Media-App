@@ -70,7 +70,7 @@ export default function Login() {
   }, [loggedIn, navigate]);
 
   return (
-    <>
+    <div className="login-page">
       <div className="form-container">
         <h1 className="montserrat-login-text">Login</h1>
         <form className="login-form" onSubmit={submitForm}>
@@ -132,6 +132,6 @@ export default function Login() {
           ) : null}
         </form>
       </div>
-    </>
+    </div>
   );
 }
