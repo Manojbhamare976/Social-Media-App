@@ -31,9 +31,7 @@ async function unsavePost(req, res) {
     if (!userSavedPosts) {
       return res.status(400).json({ msg: "user hasn't saved this post" });
     }
-    user.savedPosts = await user.savedPosts.filter((id) => {
-      id !== postId;
-    });
+    user.savedPosts = user.savedPosts.filter((id) => id.toString() !== postId);
     await user.save();
   } catch (err) {
     console.log(err.message);
