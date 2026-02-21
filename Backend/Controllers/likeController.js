@@ -23,8 +23,9 @@ async function like(req, res) {
 
     user.likedPosts.push(post._id);
     await user.save();
+    return res.json({ success: true });
   } catch (err) {
-    console.log(err);
+    return res.json({ msg: err.message });
   }
 }
 
@@ -57,14 +58,19 @@ async function dislike(req, res) {
     console.log("this post has been liked by a user");
   }
 
-  user.likedPosts = user.likedPosts.filter((id) => id.toString() !== postId);
-  console.log(user.likedPosts);
-  await user.save();
+  try {
+    user.likedPosts = user.likedPosts.filter((id) => id.toString() !== postId);
+    console.log(user.likedPosts);
+    await user.save();
 
-  post.likes = post.likes.filter((id) => id.toString() !== userId);
-  post.likesCount -= 1;
-  console.log(post.likes);
-  await post.save();
+    post.likes = post.likes.filter((id) => id.toString() !== userId);
+    post.likesCount -= 1;
+    console.log(post.likes);
+    await post.save();
+    return res.json({ success: true });
+  } catch (err) {
+    return res.json({ msg: err.message });
+  }
 }
 
 async function isLiked(req, res) {
