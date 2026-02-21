@@ -1,0 +1,162 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+.montserrat-text {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+.homepage-layout {
+  background: #0f1115;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-details {
+  background: #0f1115;
+  display: inline-flex;
+  justify-content: space-evenly;
+  margin-bottom: 10px;
+}
+.user-details img {
+  border-radius: 50%;
+}
+.user-details p {
+  color: white;
+}
+.user-details button {
+  color: white;
+  background-color: rgb(61, 54, 54);
+  border-radius: 12px;
+  width: 100px;
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px 5px rgba(255, 240, 240, 0.073);
+  width: 300px;
+}
+
+.caption {
+  color: white;
+  margin-left: 10px;
+}
+
+.post-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+.post-buttons button {
+  color: white;
+  background-color: #0f1115;
+  box-shadow: 0px;
+  border: none;
+  border-radius: 100px;
+  margin-left: 20px;
+  height: auto;
+}
+.post-buttons p {
+  color: white;
+  display: inline-block;
+  margin-left: 5px;
+}
+.post-buttons .bookmark-btn {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.profile-pic {
+  border-radius: 50%;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.profile-pic:hover {
+  opacity: 0.8;
+}
+
+.username-link {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.username-link:hover {
+  color: #a78bfa;
+}
+
+.follow-btn {
+  color: white;
+  background-color: rgb(61, 54, 54);
+  border-radius: 12px;
+  width: 100px;
+  border: none;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.1s;
+}
+.follow-btn:hover {
+  background-color: rgb(90, 80, 80);
+  transform: scale(1.04);
+}
+.follow-btn.following {
+  background-color: transparent;
+  border: 1px solid #a78bfa;
+  color: #a78bfa;
+}
+.follow-btn.following:hover {
+  background-color: rgba(167, 139, 250, 0.1);
+}
+
+.action-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  border-radius: 100px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  transition:
+    transform 0.15s ease,
+    color 0.2s ease;
+}
+.action-btn:hover {
+  transform: scale(1.2);
+}
+.action-btn:active {
+  transform: scale(0.9);
+}
+
+.like-btn.liked {
+  color: #ff4d6d;
+}
+
+.bookmark-btn.saved {
+  color: #ffffff;
+}
+
+.comment-btn:hover {
+  color: #60a5fa;
+}
+
+.like-count {
+  color: white;
+  display: inline-block;
+  margin-left: 4px;
+  margin-right: 4px;
+  min-width: 20px;
+}
