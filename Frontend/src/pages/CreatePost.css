@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+.create-post-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  background-color: rgb(45, 45, 45);
+  border-radius: 12px;
+  width: fit-content;
+  min-width: 300px;
+}
+
+.create-post-title {
+  color: white;
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(69, 68, 68);
+  color: rgba(200, 200, 200, 0.9);
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.file-upload-label:hover {
+  background-color: rgb(85, 84, 84);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.file-input {
+  display: none;
+}
+
+.caption-input {
+  background-color: rgb(69, 68, 68);
+  color: white;
+  border: 1px solid rgba(39, 39, 39, 0.3);
+  border-radius: 100px;
+  height: 36px;
+  padding-left: 14px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.caption-input::placeholder {
+  color: rgba(108, 108, 108, 0.914);
+}
+
+.caption-input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.upload-btn {
+  background-color: rgb(69, 68, 68);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  height: 34px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.upload-btn:hover {
+  background-color: rgb(100, 100, 100);
+  transform: scale(1.02);
+}

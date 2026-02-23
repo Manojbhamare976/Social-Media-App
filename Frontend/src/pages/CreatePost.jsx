@@ -1,6 +1,6 @@
 import { useState } from "react";
 import api from "../api/axiosUserClient";
-
+import "./CreatePost.css";
 export default function CreatePost() {
   const [files, setFiles] = useState([]);
   const [caption, setCaption] = useState("");
@@ -33,24 +33,29 @@ export default function CreatePost() {
   }
 
   return (
-    <div>
-      <h2>Create Post</h2>
+    <div className="create-post-container poppins-medium">
+      <h2 className="create-post-title">Create Post</h2>
 
-      <input
-        type="file"
-        multiple
-        accept="image/*,video/*"
-        onChange={(e) => setFiles([...e.target.files])}
-      />
-
+      <label className="file-upload-label">
+        <input
+          type="file"
+          accept="image/*,video/*"
+          onChange={(e) => setFiles([e.target.files[0]])}
+          className="file-input"
+        />
+        {files.length > 0 ? `${files[0].name}` : "Choose photo or video"}
+      </label>
       <input
         type="text"
-        placeholder="Caption"
+        placeholder="Write a Caption..."
         value={caption}
         onChange={(e) => setCaption(e.target.value)}
+        className="caption-input poppins-medium"
       />
 
-      <button onClick={handleCreatePost}>Upload</button>
+      <button className="upload-btn poppins-medium" onClick={handleCreatePost}>
+        Upload
+      </button>
     </div>
   );
 }
