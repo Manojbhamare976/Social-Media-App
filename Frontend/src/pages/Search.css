@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+.montserrat-text {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+.noto-serif {
+  font-family: "Noto Serif", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: row;
+}
+.search-form input {
+  border-radius: 100px;
+  border: 1px solid rgba(39, 39, 39, 0.113);
+  height: 30px;
+  width: auto;
+  background-color: rgb(69, 68, 68);
+  color: white;
+  padding-left: 10px;
+}
+.search-form input::placeholder {
+  color: rgb(108, 108, 108);
+}
+.search-form button {
+  background-color: rgb(69, 68, 68);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+.search-form button:hover {
+  cursor: pointer;
+  transform: scale(1.15);
+  background-color: rgb(100, 100, 100);
+}
+
+.search-result {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+}
+.search-result:hover {
+  cursor: pointer;
+  border-radius: 10px;
+  background: rgb(116, 116, 116);
+}
+.search-result img {
+  border-radius: 100px;
+  min-height: 50px;
+  max-height: 70px;
+  margin-right: 10px;
+}
+.search-result p {
+  color: white;
+  margin: 0;
+}
+.search-result .user-details {
+  display: flex;
+  flex-direction: column;
+  background: inherit;
+}
+.search-result .user-bio {
+  color: rgb(165, 165, 165);
+}
+
+.user-not-found {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding-left: 45px;
+}
+.user-not-found p {
+  color: white;
+  margin: 0;
+}

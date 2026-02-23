@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import api from "../api/axiosUserClient.js";
 import { useNavigate } from "react-router-dom";
-
+import "./Search.css";
 export default function SearchUser() {
   const navigate = useNavigate();
   let [searchData, setSearchData] = useState({ data: "" });
-  let [result, setResult] = useState(null);
-
+  let [result, setResult] = useState(undefined);
+  let [error, setError] = useState(null);
   async function getResult(e) {
     e.preventDefault();
     try {
@@ -19,21 +19,27 @@ export default function SearchUser() {
           username: searchData.data,
         },
       });
-      console.log(res.data.user);
-      setResult(res.data.user);
-      console.log(result);
+      if (res.data.user) {
+        setResult(res.data.user);
+      } else {
+        setResult(null);
+      }
+      setError(null);
     } catch (err) {
       console.log(err.message);
+      setResult(undefined);
+      setError("Network error. Please try again.");
     }
   }
 
   return (
-    <>
-      <form>
+    <div>
+      <form className="search-form">
         <input
+          className="poppins-medium"
           name="data"
           type="text"
-          placeholder="search something"
+          placeholder="search user"
           value={searchData.data}
           onChange={(e) =>
             setSearchData({ ...searchData, [e.target.name]: e.target.value })
@@ -43,13 +49,33 @@ export default function SearchUser() {
           <Search />
         </button>
       </form>
-      {result && (
-        <div>
+      {result === undefined ? null : result ? (
+        <div
+          onClick={() =>
+            navigate({
+              pathname: "/userprofile",
+              search: `?userId=${result._id}`,
+            })
+          }
+          className="search-result poppins-medium"
+        >
           <img src={result.profilePic} alt="no profile image" />
-          <p>{result.username}</p>
-          <p>{result.bio}</p>
+          <div className="user-details">
+            <p>{result.username}</p>
+            <p className="user-bio noto-serif">{result.bio}</p>
+          </div>
+        </div>
+      ) : (
+        <div className="user-not-found poppins-medium">
+          {" "}
+          <p>User not found</p>
         </div>
       )}
-    </>
+      {error ? (
+        <div>
+          <p>{error}</p>
+        </div>
+      ) : null}
+    </div>
   );
 }
