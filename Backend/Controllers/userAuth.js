@@ -74,7 +74,7 @@ async function login(req, res) {
     let isPasswordMatched = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatched) {
-      return res.status(400).json("Password did not match");
+      return res.status(400).json({ msg: "Password did not match" });
     }
 
     const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
