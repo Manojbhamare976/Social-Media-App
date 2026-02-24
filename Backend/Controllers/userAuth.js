@@ -65,9 +65,9 @@ async function login(req, res) {
       return res.status(400).json({ msg: "Credentials missing" });
     }
 
-    let user = await User.findOne({ username, email });
+    let user = await User.findOne({ username });
 
-    if (!user) {
+    if (!user || user.email !== email) {
       return res.status(400).json({ msg: "Invalid credentials" });
     }
 
