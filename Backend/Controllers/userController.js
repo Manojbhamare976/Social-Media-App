@@ -221,6 +221,24 @@ async function getCurrentUserId(req, res) {
   }
 }
 
+async function showFollowers(req, res) {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId).populate(
+      "followers",
+      "name profilePic bio",
+    );
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    return res.json({ followers: user.followers });
+  } catch (err) {
+    return res.status(500).json({ msg: "Server error", error: err.message });
+  }
+}
+
 export {
   increaseFollowers,
   decreaseFollowers,
@@ -231,4 +249,5 @@ export {
   removeProfilePic,
   findUserProfile,
   getCurrentUserId,
+  showFollowers,
 };
