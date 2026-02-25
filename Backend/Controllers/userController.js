@@ -226,7 +226,7 @@ async function showFollowers(req, res) {
     const { userId } = req.params;
     const user = await User.findById(userId).populate(
       "followers",
-      "name profilePic bio",
+      "username profilePic bio",
     );
 
     if (!user) {
@@ -235,7 +235,25 @@ async function showFollowers(req, res) {
 
     return res.json({ followers: user.followers });
   } catch (err) {
-    return res.status(500).json({ msg: "Server error", error: err.message });
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+async function showFollowing(req, res) {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId).populate(
+      "following",
+      "username profilePic bio",
+    );
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    return res.json({ following: user.following });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
   }
 }
 
@@ -250,4 +268,5 @@ export {
   findUserProfile,
   getCurrentUserId,
   showFollowers,
+  showFollowing,
 };
