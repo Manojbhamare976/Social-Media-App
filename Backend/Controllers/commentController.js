@@ -139,6 +139,52 @@ async function likeComment(req, res) {
   }
 }
 
+async function dislikeComment(req, res) {
+  let { userId } = req.user;
+  let { commentId } = req.body;
+
+  let user = await User.findById(userId);
+  let comment = await Comment.findById(commentId);
+
+  if (!user) {
+    return console.log("userId not found");
+  } else if (!comment) {
+    return console.log("commentId not found");
+  }
+
+  let userLikedPost = user.likedComments.includes(comment._id);
+  if (!userLikedPost) {
+    console.log("user has not liked this comment");
+    return;
+  } else {
+    console.log("user has liked this comment");
+  }
+
+  let commentLikes = comment.likes.includes(user._id);
+  if (!commentLikes) {
+    console.log("user has not liked this comment");
+    return;
+  } else {
+    console.log("this comment has been liked by a user");
+  }
+
+  try {
+    user.likedComments = user.likedComments.filter(
+      (id) => id.toString() !== commentId,
+    );
+    console.log(user.likedComments);
+    await user.save();
+
+    comment.likes = comment.likes.filter((id) => id.toString() !== userId);
+    comment.likesCount -= 1;
+    console.log(comment.likes);
+    await comment.save();
+    return res.json({ success: true });
+  } catch (err) {
+    return res.json({ msg: err.message });
+  }
+}
+
 export {
   createComment,
   deleteComment,
@@ -146,4 +192,5 @@ export {
   reply,
   showReply,
   likeComment,
+  dislikeComment,
 };
