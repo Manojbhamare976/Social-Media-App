@@ -8,6 +8,8 @@ import EditProfile from "../pages/EditProfile.jsx";
 import UserProfile from "../pages/UserProfile.jsx";
 import Signup from "../userAuth/Signup.jsx";
 import Login from "../userAuth/Login.jsx";
+import Followers from "../pages/Followers.jsx";
+import Following from "../pages/Following.jsx";
 
 const routes = [
   {
@@ -18,6 +20,8 @@ const routes = [
       { path: "/post/create", element: <CreatePost /> },
       { path: "/userprofile/user", element: <Userprofile /> },
       { path: "/userprofile", element: <UserProfile /> },
+      { path: "/userprofile/followers", element: <Followers /> },
+      { path: "/userprofile/following", element: <Following /> },
     ],
   },
 
