@@ -1,6 +1,6 @@
 import Comment from "../Models/comment.js";
 import Post from "../Models/post.js";
-
+import User from "../Models/user.js";
 async function createComment(req, res) {
   let { userId } = req.user;
   let { postId, text } = req.body;
@@ -113,4 +113,37 @@ async function showReply(req, res) {
   }
 }
 
-export { createComment, deleteComment, showComments, reply, showReply };
+async function likeComment(req, res) {
+  let { userId } = req.user;
+  let { commentId } = req.body;
+
+  let user = await User.findById(userId);
+  let comment = await Comment.findById(commentId);
+
+  if (!user) {
+    return console.log("userId not found");
+  } else if (!comment) {
+    return console.log("commentId not found");
+  }
+  try {
+    if (comment.likes.includes(user._id)) return;
+    comment.likes.push(user._id);
+    comment.likesCount += 1;
+    await comment.save();
+
+    user.likedComments.push(comment._id);
+    await user.save();
+    return res.json({ success: true });
+  } catch (err) {
+    return res.json({ msg: err.message });
+  }
+}
+
+export {
+  createComment,
+  deleteComment,
+  showComments,
+  reply,
+  showReply,
+  likeComment,
+};
