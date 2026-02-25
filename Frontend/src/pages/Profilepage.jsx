@@ -97,9 +97,31 @@ export default function Userprofile() {
           <p>{result.createdPostsCount}</p>
           <p>posts</p>
           <p>{result.followersCount}</p>
-          <p>followers</p>
+          <p
+            onClick={() => {
+              result.followersCount === 0
+                ? null
+                : navigate({
+                    pathname: "/userprofile/followers",
+                    search: `?userId=${result._id}`,
+                  });
+            }}
+          >
+            followers
+          </p>
           <p>{result.followingCount}</p>
-          <p>following</p>
+          <p
+            onClick={() => {
+              result.followingCount === 0
+                ? null
+                : navigate({
+                    pathname: "/userprofile/following",
+                    search: `?userId=${result._id}`,
+                  });
+            }}
+          >
+            following
+          </p>
           <button
             onClick={() => {
               navigate("/userprofile/update");
