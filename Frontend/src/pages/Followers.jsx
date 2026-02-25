@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/axiosUserClient";
 import { useSearchParams, useNavigate } from "react-router-dom";
-
+import "./Followers.css";
 export default function Followers() {
   const navigate = useNavigate();
   let [followers, setFollowers] = useState([]);
@@ -18,10 +18,11 @@ export default function Followers() {
   }, []);
 
   return (
-    <div>
+    <div className="follower-list">
       {followers?.followers?.length > 0
         ? followers?.followers?.map((f) => (
             <div
+              className="follower"
               key={f._id}
               onClick={() =>
                 navigate({
@@ -31,9 +32,9 @@ export default function Followers() {
               }
             >
               <img src={f.profilePic} />
-              <div>
-                <p>{f.username}</p>
-                <p>{f.bio}</p>
+              <div className="user-detail">
+                <p className="poppins-medium">{f.username}</p>
+                <p className="user-bio noto-serif">{f.bio}</p>
               </div>
             </div>
           ))
