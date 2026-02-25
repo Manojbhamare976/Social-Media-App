@@ -7,6 +7,7 @@ import {
   reply,
   showReply,
   likeComment,
+  dislikeComment,
 } from "../Controllers/commentController.js";
 import { authenticateUser } from "../Controllers/userAuth.js";
 
@@ -18,4 +19,5 @@ router.get("/comments", authenticateUser, showComments);
 router.post("/reply", authenticateUser, reply);
 router.get("/showreply", authenticateUser, showReply);
 router.post("/likecomment", authenticateUser, likeComment);
+router.put("/dislikecomment", authenticateUser, dislikeComment);
 export default router;
