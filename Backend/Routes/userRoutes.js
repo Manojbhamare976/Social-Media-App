@@ -10,6 +10,7 @@ import {
   findUserProfile,
   getCurrentUserId,
   showFollowers,
+  showFollowing,
 } from "../Controllers/userController.js";
 import { authenticateUser } from "../Controllers/userAuth.js";
 const router = express.Router();
@@ -24,4 +25,5 @@ router.patch("/update/profile", authenticateUser, updateProfile);
 router.patch("/remove/profilepic", authenticateUser, removeProfilePic);
 router.get("/me/id", authenticateUser, getCurrentUserId);
 router.get("/followers", authenticateUser, showFollowers);
+router.get("/following", authenticateUser, showFollowing);
 export default router;
