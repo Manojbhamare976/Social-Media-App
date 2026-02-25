@@ -24,6 +24,6 @@ router.get("/userprofile/:userId", authenticateUser, findUserProfile);
 router.patch("/update/profile", authenticateUser, updateProfile);
 router.patch("/remove/profilepic", authenticateUser, removeProfilePic);
 router.get("/me/id", authenticateUser, getCurrentUserId);
-router.get("/followers", authenticateUser, showFollowers);
-router.get("/following", authenticateUser, showFollowing);
+router.get("/followers/:userId", authenticateUser, showFollowers);
+router.get("/following/:userId", authenticateUser, showFollowing);
 export default router;
