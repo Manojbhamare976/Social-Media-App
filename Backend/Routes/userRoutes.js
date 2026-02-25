@@ -8,6 +8,7 @@ import {
   updateProfile,
   removeProfilePic,
   findUserProfile,
+  getCurrentUserId,
 } from "../Controllers/userController.js";
 import { authenticateUser } from "../Controllers/userAuth.js";
 const router = express.Router();
@@ -20,4 +21,5 @@ router.get("/user", authenticateUser, findUserById);
 router.get("/userprofile/:userId", authenticateUser, findUserProfile);
 router.patch("/update/profile", authenticateUser, updateProfile);
 router.patch("/remove/profilepic", authenticateUser, removeProfilePic);
+router.get("/me/id", authenticateUser, getCurrentUserId);
 export default router;
