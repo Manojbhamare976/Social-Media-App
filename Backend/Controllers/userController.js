@@ -212,6 +212,15 @@ async function removeProfilePic(req, res) {
   }
 }
 
+// returns the currently logged in user's id
+async function getCurrentUserId(req, res) {
+  try {
+    return res.json({ userId: req.user.userId });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
 export {
   increaseFollowers,
   decreaseFollowers,
@@ -221,4 +230,5 @@ export {
   updateProfile,
   removeProfilePic,
   findUserProfile,
+  getCurrentUserId,
 };
