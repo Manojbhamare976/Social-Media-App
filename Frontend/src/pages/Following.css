@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+.montserrat-text {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+.noto-serif {
+  font-family: "Noto Serif", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+}
+
+.following-list {
+  margin-left: 72px;
+  display: flex;
+  flex-direction: column;
+}
+
+.following-user {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  border-radius: 20px;
+  width: 300px;
+  color: white;
+  margin-bottom: 5px;
+}
+
+.following-user:hover {
+  cursor: pointer;
+  background-color: rgb(100, 100, 100);
+}
+
+.following-user img {
+  min-height: 50px;
+  max-height: 100px;
+  border-radius: 50px;
+}
+
+.following-user .user-detail {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  background: inherit;
+}
+
+.user-detail p {
+  margin-bottom: 0;
+}
+
+.user-detail .user-bio {
+  margin-top: 0;
+  color: rgb(165, 165, 165);
+}
