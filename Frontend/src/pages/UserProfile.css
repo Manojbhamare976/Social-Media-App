@@ -1,0 +1,271 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Poppins:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
+
+.montserrat-text {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.div {
+  min-height: 100vh;
+  background: #0f1115;
+  color: white;
+  padding: 24px 16px 80px;
+  max-width: 980px;
+  margin: 0 auto;
+  font-family: "Poppins", sans-serif;
+  margin-left: 72px;
+}
+
+.div > img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(167, 139, 250, 0.4);
+}
+
+.div > p:nth-of-type(1) {
+  margin-top: 14px;
+  font-size: 20px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+}
+
+.div > p:nth-of-type(2) {
+  margin-top: 6px;
+  color: #cfcfcf;
+  max-width: 420px;
+  line-height: 1.4;
+}
+
+.div > p:nth-of-type(3),
+.div > p:nth-of-type(5),
+.div > p:nth-of-type(7) {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.div > p:nth-of-type(4),
+.div > p:nth-of-type(6),
+.div > p:nth-of-type(8) {
+  color: #9aa0a6;
+  margin-right: 16px;
+  display: inline-block;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+}
+
+.div > button {
+  display: block;
+  margin-top: 14px;
+  background: transparent;
+  border: 1px solid #a78bfa;
+  color: #a78bfa;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.div > button:hover {
+  background: rgba(167, 139, 250, 0.12);
+  transform: scale(1.03);
+}
+
+.div > div {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.profile-post-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0f1115;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.06);
+  position: relative;
+}
+
+.profile-post-media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.profile-post-media img,
+.profile-post-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.profile-post-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  padding: 6px 6px;
+}
+
+.div > div > div img,
+.div > div > div video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.div > div > div button:hover {
+  transform: scale(1.15);
+}
+
+.div > div > div button:nth-of-type(1) {
+  left: 8px;
+}
+
+.div > div > div button:nth-of-type(2) {
+  left: 44px;
+}
+
+.div > div > div button:nth-of-type(3) {
+  right: 8px;
+}
+
+.profile-post-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.profile-post-card:hover::after {
+  opacity: 1;
+}
+
+.div > div > p {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #9aa0a6;
+  font-family: "Montserrat", sans-serif;
+  margin-top: 40px;
+}
+
+.profile-like-count {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: "Montserrat", sans-serif;
+  pointer-events: none;
+}
+
+.profile-post-actions .action-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  border-radius: 100px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  transition:
+    transform 0.15s ease,
+    color 0.2s ease;
+}
+
+.profile-post-actions .action-btn:hover {
+  transform: scale(1.2);
+}
+
+.profile-post-actions .action-btn:active {
+  transform: scale(0.9);
+}
+
+.profile-post-actions .like-btn.liked {
+  color: #ff4d6d;
+}
+
+.profile-post-actions .bookmark-btn.saved {
+  color: #ffffff;
+}
+
+.profile-post-actions .comment-btn:hover {
+  color: #60a5fa;
+}
+
+.profile-post-actions .like-count {
+  color: white;
+  display: inline-block;
+  margin-left: 4px;
+  margin-right: 4px;
+  min-width: 20px;
+}
+
+.profile-post-actions .bookmark-btn {
+  margin-left: auto;
+}
+
+.div > button.follow-btn {
+  background-color: rgb(61, 54, 54);
+  border: none;
+  color: white;
+}
+
+.div > button.follow-btn:hover {
+  background-color: rgb(90, 80, 80);
+  transform: scale(1.04);
+}
+
+.div > button.follow-btn.following {
+  background-color: transparent;
+  border: 1px solid #a78bfa;
+  color: #a78bfa;
+}
+
+.div > button.follow-btn.following:hover {
+  background-color: rgba(167, 139, 250, 0.1);
+}
+
+.div > button.follow-btn {
+  box-sizing: border-box;
+  border: 1px solid transparent;
+}
+
+.div > button.follow-btn.following {
+  border-color: #a78bfa;
+}
+
+@media (max-width: 700px) {
+  .div > div {
+    grid-template-columns: 1fr;
+  }
+
+  .div {
+    padding: 16px 10px 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .div > img {
+    width: 110px;
+    height: 110px;
+  }
+
+  .div > p:nth-of-type(1) {
+    font-size: 18px;
+  }
+}

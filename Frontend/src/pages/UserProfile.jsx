@@ -2,74 +2,133 @@ import { useState, useEffect } from "react";
 import api from "../api/axiosUserClient";
 import { Heart, MessageCircle, Bookmark } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import "./UserProfile.css";
 
 export default function UserProfile() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
   let [result, setResult] = useState(null);
-
+  let [likeMap, setLikeMap] = useState({});
+  let [saveMap, setSaveMap] = useState({});
+  let [followMap, setFollowMap] = useState({});
+  let [currentUserId, setCurrentUserId] = useState(null);
+  let [likeCounts, setLikeCounts] = useState({});
   useEffect(() => {
     async function getUserProfile() {
-      console.log(userId);
+      const meRes = await api.get("/userprofile/me/id");
+      const meId = meRes.data.userId;
+      setCurrentUserId(meId);
+
       let res = await api.get(`/userprofile/userprofile/${userId}`);
-      console.log(res.data);
-      setResult(res.data);
-      console.log(result);
+      const data = res.data;
+
+      setResult(data);
+
+      const followRes = await api.get("/userprofile/isfollowing", {
+        params: { userid: data._id },
+      });
+
+      setFollowMap({
+        [data._id]: followRes.data.following,
+      });
+
+      const counts = {};
+      const likeStatus = {};
+      const saveStatus = {};
+
+      const posts = data.createdPosts || [];
+
+      await Promise.all(
+        posts.map(async (p) => {
+          if (!p?._id) return;
+
+          counts[p._id] = p.likesCount;
+
+          const [likeRes, saveRes] = await Promise.all([
+            api.get("/like/isliked", { params: { postId: p._id } }),
+            api.get("/save/issaved", { params: { postId: p._id } }),
+          ]);
+
+          likeStatus[p._id] = likeRes.data.likedPost;
+          saveStatus[p._id] = saveRes.data.userSavedPosts;
+        }),
+      );
+
+      setLikeCounts(counts);
+      setLikeMap(likeStatus);
+      setSaveMap(saveStatus);
     }
+
     getUserProfile();
   }, [userId]);
 
-  //like posts function
-  async function likePost(postId) {
-    api.post("/like/like", { postId });
-    console.log("like button pushed");
-  }
+  async function toggleLike(postId) {
+    const alreadyLiked = likeMap[postId];
 
-  //dislike posts function
-  async function dislikePost(postId) {
-    api.put("/like/dislike", { postId });
-    console.log("dislike button pushed");
-  }
+    setLikeMap((prev) => ({ ...prev, [postId]: !alreadyLiked }));
+    setLikeCounts((prev) => ({
+      ...prev,
+      [postId]: prev[postId] + (alreadyLiked ? -1 : 1),
+    }));
 
-  //this function checks if a post is liked by the user
-  async function isliked(postId) {
-    let res = await api.get("/like/isliked", {
-      params: { postId: postId },
-    });
-    return res.data.likedPost;
-  }
-
-  //save post function
-  async function savePost(postId) {
     try {
-      await api.post("/save/save", { postId });
-    } catch (err) {
-      console.log(err.message);
+      if (alreadyLiked) {
+        await api.put("/like/dislike", { postId });
+      } else {
+        await api.post("/like/like", { postId });
+      }
+    } catch {
+      setLikeMap((prev) => ({ ...prev, [postId]: alreadyLiked }));
+      setLikeCounts((prev) => ({
+        ...prev,
+        [postId]: prev[postId] + (alreadyLiked ? 1 : -1),
+      }));
     }
   }
 
-  //unsave post function
-  async function unsavePost(postId) {
-    await api.put("/save/unsave", { postId });
+  async function toggleSave(postId) {
+    const alreadySaved = saveMap[postId];
+
+    setSaveMap((prev) => ({ ...prev, [postId]: !alreadySaved }));
+
+    try {
+      if (alreadySaved) {
+        await api.put("/save/unsave", { postId });
+      } else {
+        await api.post("/save/save", { postId });
+      }
+    } catch {
+      setSaveMap((prev) => ({ ...prev, [postId]: alreadySaved }));
+    }
   }
 
-  //this function checks if a post is saved by the user
-  async function isSaved(postId) {
-    try {
-      let res = await api.get("/save/issaved", {
-        params: { postId: postId },
-      });
-      return res.data.userSavedPosts;
-    } catch (err) {
-      console.log(err.message);
-    }
+  async function followUser(userid) {
+    await api.post("/userprofile/increase/followers", { userid });
+
+    setFollowMap((prev) => ({ ...prev, [userid]: true }));
+
+    setResult((prev) => ({
+      ...prev,
+      followersCount: prev.followersCount + 1,
+    }));
+  }
+
+  async function unfollowUser(userid) {
+    await api.put("/userprofile/decrease/followers", { userid });
+
+    setFollowMap((prev) => ({ ...prev, [userid]: false }));
+
+    setResult((prev) => ({
+      ...prev,
+      followersCount: prev.followersCount - 1,
+    }));
   }
 
   return (
     <>
       {result && (
-        <div>
+        <div className="div">
           <img
             src={result.profilePic}
             width={200}
@@ -81,60 +140,95 @@ export default function UserProfile() {
           <p>{result.createdPostsCount}</p>
           <p>posts</p>
           <p>{result.followersCount}</p>
-          <p>followers</p>
-          <p>{result.followingCount}</p>
-          <p>following</p>
-          <button
+          <p
             onClick={() => {
-              navigate("/userprofile/update");
+              result.followersCount === 0
+                ? null
+                : navigate({
+                    pathname: "/userprofile/followers",
+                    search: `?userId=${result._id}`,
+                  });
             }}
           >
-            Edit Profile
-          </button>
+            followers
+          </p>
+          <p>{result.followingCount}</p>
+          <p
+            onClick={() => {
+              result.followingCount === 0
+                ? null
+                : navigate({
+                    pathname: "/userprofile/following",
+                    search: `?userId=${result._id}`,
+                  });
+            }}
+          >
+            following
+          </p>
+          {currentUserId !== result._id && (
+            <button
+              className={`montserrat-text follow-btn ${
+                followMap[result._id] ? "following" : ""
+              }`}
+              onClick={() =>
+                followMap[result._id]
+                  ? unfollowUser(result._id)
+                  : followUser(result._id)
+              }
+            >
+              {followMap[result._id] ? "Following" : "Follow"}
+            </button>
+          )}
           {result.createdPostsCount > 0 ? (
             <div>
-              {result.createdPosts.map((post, i) => (
-                <div key={i}>
-                  {post.content.includes("video") ? (
-                    <video key={i} src={post.content} controls width="300" />
-                  ) : (
-                    <img key={i} src={post.content} width={"300"} />
-                  )}
-                  <button
-                    onClick={async () => {
-                      let result = await isliked(post._id);
-                      if (result) {
-                        dislikePost(post._id);
-                      } else {
-                        likePost(post._id);
+              {result.createdPosts.map((post) => (
+                <div key={post._id} className="profile-post-card">
+                  <div className="profile-post-media">
+                    {post.content.includes("video") ? (
+                      <video src={post.content} controls />
+                    ) : (
+                      <img src={post.content} alt="" />
+                    )}
+                  </div>
+
+                  <div className="profile-post-actions">
+                    <button
+                      className={`action-btn like-btn ${likeMap[post._id] ? "liked" : ""}`}
+                      onClick={() => toggleLike(post._id)}
+                      aria-label="Like post"
+                    >
+                      <Heart
+                        fill={likeMap[post._id] ? "currentColor" : "none"}
+                      />
+                    </button>
+
+                    <p className="like-count">
+                      {likeCounts[post._id] ?? post.likesCount}
+                    </p>
+
+                    <button
+                      className="action-btn comment-btn"
+                      onClick={() =>
+                        navigate({
+                          pathname: "/comment",
+                          search: `?postId=${post._id}`,
+                        })
                       }
-                    }}
-                  >
-                    <Heart />
-                  </button>
-                  <button
-                    onClick={() => {
-                      navigate({
-                        pathname: "/comment",
-                        search: `?postId=${post._id}`,
-                        replace: true,
-                      });
-                    }}
-                  >
-                    <MessageCircle />
-                  </button>
-                  <button
-                    onClick={async () => {
-                      let result = await isSaved(post._id);
-                      if (result) {
-                        unsavePost(post._id);
-                      } else {
-                        savePost(post._id);
-                      }
-                    }}
-                  >
-                    <Bookmark />
-                  </button>
+                      aria-label="Comment"
+                    >
+                      <MessageCircle />
+                    </button>
+
+                    <button
+                      className={`action-btn bookmark-btn ${saveMap[post._id] ? "saved" : ""}`}
+                      onClick={() => toggleSave(post._id)}
+                      aria-label="Save post"
+                    >
+                      <Bookmark
+                        fill={saveMap[post._id] ? "currentColor" : "none"}
+                      />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
