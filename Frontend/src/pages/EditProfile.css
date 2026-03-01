@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Poppins:wght@400;500&display=swap");
+
+.edit-profile-page {
+  min-height: 100vh;
+  background: #0f1115;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  padding: 20px;
+}
+
+.edit-profile-card {
+  background: #0f1115;
+  border-radius: 16px;
+  padding: 26px 22px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.edit-profile-card h2 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.edit-profile-file {
+  display: none;
+}
+
+.custom-file-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(69, 68, 68);
+  color: rgba(200, 200, 200, 0.9);
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.custom-file-btn:hover {
+  background-color: rgb(85, 84, 84);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.bio-input {
+  background: #14161b;
+  border: 1px solid #2b2e36;
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  outline: none;
+}
+
+.bio-input::placeholder {
+  color: #9aa0a6;
+}
+
+.update-btn {
+  margin-top: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #a78bfa;
+  background: transparent;
+  color: #a78bfa;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.update-btn:hover {
+  background: rgba(167, 139, 250, 0.12);
+  transform: scale(1.03);
+}
+
+.remove-btn {
+  margin-top: 14px;
+  background: transparent;
+  border: 1px solid #ff4d6d;
+  color: #ff4d6d;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-btn:hover {
+  background: rgba(255, 77, 109, 0.12);
+  transform: scale(1.03);
+}
