@@ -23,11 +23,11 @@ const routes = [
       { path: "/userprofile/followers", element: <Followers /> },
       { path: "/userprofile/following", element: <Following /> },
       { path: "/userprofile/update", element: <EditProfile /> },
+      { path: "/comment", element: <CreateComment /> },
     ],
   },
 
   // pages WITHOUT sidebar
-  { path: "/comment", element: <CreateComment /> },
   { path: "/signup", element: <Signup /> },
   { path: "/login", element: <Login /> },
 ];
