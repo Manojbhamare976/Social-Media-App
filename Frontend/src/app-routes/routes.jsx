@@ -22,12 +22,12 @@ const routes = [
       { path: "/userprofile", element: <UserProfile /> },
       { path: "/userprofile/followers", element: <Followers /> },
       { path: "/userprofile/following", element: <Following /> },
+      { path: "/userprofile/update", element: <EditProfile /> },
     ],
   },
 
   // pages WITHOUT sidebar
   { path: "/comment", element: <CreateComment /> },
-  { path: "/userprofile/update", element: <EditProfile /> },
   { path: "/signup", element: <Signup /> },
   { path: "/login", element: <Login /> },
 ];
