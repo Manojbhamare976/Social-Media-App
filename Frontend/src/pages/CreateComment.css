@@ -254,3 +254,24 @@
   font-family: "Poppins", sans-serif;
   font-size: 13px;
 }
+
+.no-comments {
+  margin-top: 60px;
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+}
+
+.no-comments-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #b7bcc6;
+  opacity: 0.95;
+}
+
+.no-comments-subtitle {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8f95a3;
+  opacity: 0.9;
+}

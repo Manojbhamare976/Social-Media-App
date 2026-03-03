@@ -172,6 +172,12 @@ export default function CreateComment() {
   return (
     <div className="comment-page">
       <div className="comment-list">
+        {comments.length === 0 && (
+          <div className="no-comments">
+            <div className="no-comments-title">No comments yet.</div>
+            <div className="no-comments-subtitle">Start the conversation.</div>
+          </div>
+        )}
         {comments.map((c) => (
           <div key={c._id} className="comment-card">
             <div className="comment-main">
