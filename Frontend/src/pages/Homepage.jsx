@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getHomeCache, setHomeCache, clearHomeCache } from "../cache/homeCache";
 import api from "../api/axiosUserClient";
 import { Heart, MessageCircle, Bookmark } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -14,13 +15,39 @@ export default function Homepage() {
   const [saveMap, setSaveMap] = useState({});
   const [likeCounts, setLikeCounts] = useState({});
   const [visibleCount, setVisibleCount] = useState(5);
+  const [isRestoring, setIsRestoring] = useState(false);
 
   const { ref, inView } = useInView({ rootMargin: "300px" });
 
   useEffect(() => {
+    const cached = getHomeCache();
+
+    if (cached && cached.posts && cached.posts.length > 0) {
+      setIsRestoring(true);
+
+      setPosts(cached.posts);
+      setFollowMap(cached.followMap);
+      setLikeMap(cached.likeMap);
+      setSaveMap(cached.saveMap);
+      setLikeCounts(cached.likeCounts);
+      setVisibleCount(cached.visibleCount);
+
+      requestAnimationFrame(() => {
+        window.scrollTo(0, cached.scrollY || 0);
+
+        // allow infinite scroll again AFTER restore
+        setTimeout(() => {
+          setIsRestoring(false);
+        }, 0);
+      });
+
+      return;
+    }
+
     async function getPosts() {
       const postRes = await api.get("/post/find");
       const fetchedPosts = postRes.data;
+
       setPosts(fetchedPosts);
 
       const counts = {};
@@ -29,29 +56,73 @@ export default function Homepage() {
       });
       setLikeCounts(counts);
 
-      // Fetch follow + like + save status in parallel per post
       fetchedPosts.forEach(async (p) => {
-        const [followRes, likeRes, saveRes] = await Promise.all([
-          api.get("/userprofile/isfollowing", {
-            params: { userid: p.user._id },
-          }),
-          api.get("/like/isliked", { params: { postId: p._id } }),
-          api.get("/save/issaved", { params: { postId: p._id } }),
-        ]);
+        const followRes = await api.get("/userprofile/isfollowing", {
+          params: { userid: p.user._id },
+        });
+
+        const likeRes = await api.get("/like/isliked", {
+          params: { postId: p._id },
+        });
+
+        const saveRes = await api.get("/save/issaved", {
+          params: { postId: p._id },
+        });
 
         setFollowMap((prev) => ({
           ...prev,
           [p.user._id]: followRes.data.following,
         }));
-        setLikeMap((prev) => ({ ...prev, [p._id]: likeRes.data.likedPost }));
+
+        setLikeMap((prev) => ({
+          ...prev,
+          [p._id]: likeRes.data.likedPost,
+        }));
+
         setSaveMap((prev) => ({
           ...prev,
           [p._id]: saveRes.data.userSavedPosts,
         }));
       });
     }
+
     getPosts();
   }, []);
+
+  useEffect(() => {
+    if (posts.length === 0) return;
+
+    setHomeCache({
+      posts,
+      followMap,
+      likeMap,
+      saveMap,
+      likeCounts,
+      visibleCount,
+      scrollY: window.scrollY,
+    });
+  }, [posts, followMap, likeMap, saveMap, likeCounts, visibleCount]);
+
+  useEffect(() => {
+    if (posts.length === 0) return;
+
+    const onScroll = () => {
+      const cached = getHomeCache();
+
+      if (!cached || !cached.posts || cached.posts.length === 0) return;
+
+      setHomeCache({
+        ...cached,
+        scrollY: window.scrollY,
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [posts]);
 
   useEffect(() => {
     setSortedPosts(
@@ -60,9 +131,23 @@ export default function Homepage() {
   }, [posts]);
 
   useEffect(() => {
+    if (isRestoring) return;
     if (!inView || visibleCount >= sortedPosts.length) return;
+
     setVisibleCount((prev) => prev + 5);
-  }, [inView]);
+  }, [inView, isRestoring]);
+
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    return () => {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "auto";
+      }
+    };
+  }, []);
 
   async function followUser(userid) {
     await api.post("/userprofile/increase/followers", { userid });
