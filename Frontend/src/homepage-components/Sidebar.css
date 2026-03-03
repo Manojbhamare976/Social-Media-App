@@ -37,3 +37,47 @@
 .sidebar button:hover {
   background: rgba(255, 255, 255, 0.08);
 }
+
+.sidebar-menu-wrapper {
+  position: relative;
+}
+
+.sidebar-menu-icon {
+  color: #bdbdbd;
+  cursor: pointer;
+}
+
+.sidebar-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 2000;
+}
+
+.sidebar-dropdown {
+  position: absolute;
+  left: 48px; /* show beside icon */
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: #16181d;
+  border-radius: 10px;
+  padding: 6px;
+
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  z-index: 2001;
+}
+
+.sidebar-dropdown button {
+  background: none;
+  border: none;
+  color: #ff5a5a;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.sidebar-dropdown button:hover {
+  background: rgba(255, 90, 90, 0.12);
+}
