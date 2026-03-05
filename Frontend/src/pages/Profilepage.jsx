@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../api/axiosUserClient";
-import { Heart, MessageCircle, Bookmark } from "lucide-react";
+import { Heart, MessageCircle, Bookmark, EllipsisVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Profilepage.css";
 export default function Userprofile() {
@@ -9,6 +9,8 @@ export default function Userprofile() {
   let [likeMap, setLikeMap] = useState({});
   let [saveMap, setSaveMap] = useState({});
   let [likeCounts, setLikeCounts] = useState({});
+  const [openMenuId, setOpenMenuId] = useState(null);
+
   useEffect(() => {
     async function getUserProfile() {
       let res = await api.get("/userprofile/user");
@@ -79,6 +81,24 @@ export default function Userprofile() {
       }
     } catch {
       setSaveMap((prev) => ({ ...prev, [postId]: alreadySaved }));
+    }
+  }
+
+  async function deletePost(postId) {
+    try {
+      await api.delete(`/post/delete/${postId}`);
+
+      setResult((prev) => ({
+        ...prev,
+        createdPosts: prev.createdPosts.filter((p) => p._id !== postId),
+        createdPostsCount: prev.createdPostsCount - 1,
+      }));
+
+      setOpenMenuId(null);
+
+      alert("Post deleted");
+    } catch (err) {
+      console.log(err.message);
     }
   }
 
@@ -178,6 +198,25 @@ export default function Userprofile() {
                         fill={saveMap[post._id] ? "currentColor" : "none"}
                       />
                     </button>
+
+                    <div className="post-menu-wrapper ">
+                      <EllipsisVertical
+                        className="post-menu-icon"
+                        onClick={() =>
+                          setOpenMenuId(
+                            openMenuId === post._id ? null : post._id,
+                          )
+                        }
+                      />
+
+                      {openMenuId === post._id && (
+                        <div className="post-dropdown">
+                          <button onClick={() => deletePost(post._id)}>
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
