@@ -79,3 +79,9 @@
   background-color: rgb(100, 100, 100);
   transform: scale(1.02);
 }
+
+@media (max-width: 480px) {
+  .create-post-container {
+    margin-left: 72px;
+  }
+}
