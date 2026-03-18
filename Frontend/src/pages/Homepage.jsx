@@ -200,89 +200,91 @@ export default function Homepage() {
   }
 
   return (
-    <div className="homepage-layout">
-      {sortedPosts?.slice(0, visibleCount).map((p) => (
-        <div key={p._id} className="posts">
-          <div className="user-details">
-            <img
-              src={p.user.profilePic}
-              width={50}
-              height={50}
-              alt="profile"
-              className="profile-pic"
-              onClick={() =>
-                navigate({
-                  pathname: "/userprofile",
-                  search: `?userId=${p.user._id}`,
-                })
-              }
-            />
-            <p
-              className="montserrat-text username-link"
-              onClick={() =>
-                navigate({
-                  pathname: "/userprofile",
-                  search: `?userId=${p.user._id}`,
-                })
-              }
-            >
-              {p.user.username}
-            </p>
-            <button
-              className={`montserrat-text follow-btn ${followMap[p.user._id] ? "following" : ""}`}
-              onClick={() =>
-                followMap[p.user._id]
-                  ? unfollowUser(p.user._id)
-                  : followUser(p.user._id)
-              }
-            >
-              {followMap[p.user._id] ? "Following" : "Follow"}
-            </button>
+    <div className="homepage">
+      <div className="homepage-layout">
+        {sortedPosts?.slice(0, visibleCount).map((p) => (
+          <div key={p._id} className="posts">
+            <div className="user-details">
+              <img
+                src={p.user.profilePic}
+                width={50}
+                height={50}
+                alt="profile"
+                className="profile-pic"
+                onClick={() =>
+                  navigate({
+                    pathname: "/userprofile",
+                    search: `?userId=${p.user._id}`,
+                  })
+                }
+              />
+              <p
+                className="montserrat-text username-link"
+                onClick={() =>
+                  navigate({
+                    pathname: "/userprofile",
+                    search: `?userId=${p.user._id}`,
+                  })
+                }
+              >
+                {p.user.username}
+              </p>
+              <button
+                className={`montserrat-text follow-btn ${followMap[p.user._id] ? "following" : ""}`}
+                onClick={() =>
+                  followMap[p.user._id]
+                    ? unfollowUser(p.user._id)
+                    : followUser(p.user._id)
+                }
+              >
+                {followMap[p.user._id] ? "Following" : "Follow"}
+              </button>
+            </div>
+
+            {p.content.map((url, i) =>
+              url.includes("video") ? (
+                <video key={i} src={url} controls width="300" />
+              ) : (
+                <img key={i} src={url} width="300" alt="post content" />
+              ),
+            )}
+
+            <p className="caption poppins-medium">{p.caption}</p>
+
+            <div className="post-buttons">
+              <button
+                className={`action-btn like-btn ${likeMap[p._id] ? "liked" : ""}`}
+                onClick={() => toggleLike(p._id)}
+                aria-label="Like post"
+              >
+                <Heart fill={likeMap[p._id] ? "currentColor" : "none"} />
+              </button>
+              <p className="poppins-medium like-count">
+                {likeCounts[p._id] ?? p.likesCount}
+              </p>
+
+              <button
+                className="action-btn comment-btn"
+                onClick={() =>
+                  navigate({ pathname: "/comment", search: `?postId=${p._id}` })
+                }
+                aria-label="Comment"
+              >
+                <MessageCircle />
+              </button>
+
+              <button
+                className={`action-btn bookmark-btn ${saveMap[p._id] ? "saved" : ""}`}
+                onClick={() => toggleSave(p._id)}
+                aria-label="Save post"
+              >
+                <Bookmark fill={saveMap[p._id] ? "currentColor" : "none"} />
+              </button>
+            </div>
           </div>
-
-          {p.content.map((url, i) =>
-            url.includes("video") ? (
-              <video key={i} src={url} controls width="300" />
-            ) : (
-              <img key={i} src={url} width="300" alt="post content" />
-            ),
-          )}
-
-          <p className="caption poppins-medium">{p.caption}</p>
-
-          <div className="post-buttons">
-            <button
-              className={`action-btn like-btn ${likeMap[p._id] ? "liked" : ""}`}
-              onClick={() => toggleLike(p._id)}
-              aria-label="Like post"
-            >
-              <Heart fill={likeMap[p._id] ? "currentColor" : "none"} />
-            </button>
-            <p className="poppins-medium like-count">
-              {likeCounts[p._id] ?? p.likesCount}
-            </p>
-
-            <button
-              className="action-btn comment-btn"
-              onClick={() =>
-                navigate({ pathname: "/comment", search: `?postId=${p._id}` })
-              }
-              aria-label="Comment"
-            >
-              <MessageCircle />
-            </button>
-
-            <button
-              className={`action-btn bookmark-btn ${saveMap[p._id] ? "saved" : ""}`}
-              onClick={() => toggleSave(p._id)}
-              aria-label="Save post"
-            >
-              <Bookmark fill={saveMap[p._id] ? "currentColor" : "none"} />
-            </button>
-          </div>
-        </div>
-      ))}
-      <div ref={ref} style={{ height: 1 }} />
+        ))}
+        <div ref={ref} style={{ height: 1 }} />
+      </div>
     </div>
   );
 }
