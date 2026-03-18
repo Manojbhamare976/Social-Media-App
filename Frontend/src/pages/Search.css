@@ -109,3 +109,9 @@
   color: white;
   margin: 0;
 }
+
+@media (max-width: 480px) {
+  .search-form {
+    margin-left: 72px;
+  }
+}
