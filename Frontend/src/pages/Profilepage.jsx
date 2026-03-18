@@ -154,10 +154,12 @@ export default function Userprofile() {
               {result.createdPosts.map((post) => (
                 <div key={post._id} className="profile-post-card">
                   <div className="profile-post-media">
-                    {post.content.includes("video") ? (
-                      <video src={post.content} controls />
-                    ) : (
-                      <img src={post.content} alt="" />
+                    {post.content.map((url, i) =>
+                      post.resourceType[i] === "video" ? (
+                        <video key={i} src={url} controls />
+                      ) : (
+                        <img key={i} src={url} alt="" />
+                      ),
                     )}
                   </div>
 
