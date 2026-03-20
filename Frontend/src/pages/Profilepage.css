@@ -276,3 +276,14 @@
     font-size: 18px;
   }
 }
+
+video {
+  background-color: black;
+}
+
+video:fullscreen {
+  object-fit: contain !important;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+}
