@@ -1,8 +1,9 @@
 import { useState } from "react";
 import api from "../api/axiosUserClient.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Signup.css";
 export default function Signup() {
+  const navigate = useNavigate();
   let [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -54,6 +55,8 @@ export default function Signup() {
         password: password,
       });
       setSignedUp(true);
+      alert("Signup successfull");
+      navigate("/login");
       return console.log("user signed up successfully");
     } catch (err) {
       setError({ text: err.response?.data?.msg || "Something went wrong" });
