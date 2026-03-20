@@ -81,7 +81,7 @@ async function deletePost(req, res) {
     user.createdPosts = user.createdPosts.filter(
       (id) => id.toString() !== postId,
     );
-
+    user.createdPostsCount -= 1;
     await user.save();
     await post.deleteOne({});
     return res.status(200).json("Post deleted successfully");
