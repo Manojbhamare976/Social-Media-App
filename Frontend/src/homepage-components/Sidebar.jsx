@@ -19,7 +19,7 @@ export default function Sidebar() {
       await api.put("/user/logout");
 
       alert("Logout successfull");
-      navigate("/login");
+      navigate("/signup");
     } catch (err) {
       console.log(err.message);
     } finally {
