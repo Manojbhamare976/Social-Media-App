@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import api from "../api/axiosUserClient.js";
+import api from "./api/axiosUserClient.js";
 
 export default function ProtectedRoute() {
   const [loading, setLoading] = useState(true);
