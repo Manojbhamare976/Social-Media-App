@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import api from "../api/axiosUserClient";
+import api from "../api/axiosUserClient.js";
 
 export default function RootRedirect() {
   const [loading, setLoading] = useState(true);

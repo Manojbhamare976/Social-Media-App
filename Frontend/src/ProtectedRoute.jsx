@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
-import api from "../api/axiosUserClient";
+import { Navigate, Outlet } from "react-router-dom";
+import api from "../api/axiosUserClient.js";
 
-export default function ProtectedRoute({ children }) {
+export default function ProtectedRoute() {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
