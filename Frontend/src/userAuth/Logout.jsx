@@ -4,7 +4,8 @@ import api from "../api/axiosUserClient.js";
 export default function Logout() {
   async function logout() {
     try {
-      await api.put("http://localhost:3000/user/logout");
+      await api.put("/user/logout");
+      window.location.href = "/signup";
     } catch (err) {
       console.log(err.message);
     }

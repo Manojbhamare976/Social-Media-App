@@ -49,7 +49,7 @@ export default function Signup() {
     }
 
     try {
-      await api.post("http://localhost:3000/user/signup", {
+      await api.post("/user/signup", {
         username: username,
         email: email,
         password: password,

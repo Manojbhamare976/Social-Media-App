@@ -11,11 +11,11 @@ async function signup(req, res) {
     let { username, email, password } = req.body;
 
     if (!username) {
-      return res.status(404).json({ msg: "Please enter username" });
+      return res.status(400).json({ msg: "Please enter username" });
     } else if (!email) {
-      return res.status(404).json({ msg: "Please enter email" });
+      return res.status(400).json({ msg: "Please enter email" });
     } else if (!password) {
-      return res.status(404).json({ msg: "Please enter password" });
+      return res.status(400).json({ msg: "Please enter password" });
     }
 
     let hashedPassword = await bcrypt.hash(password, 10);
@@ -42,15 +42,15 @@ async function signup(req, res) {
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 15 * 60 * 1000,
+      path: "/",
     });
 
     console.log(accessToken);
     return res.json({
       msg: "signup successfull",
-      accessToken,
     });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
@@ -65,9 +65,11 @@ async function login(req, res) {
       return res.status(400).json({ msg: "Credentials missing" });
     }
 
-    let user = await User.findOne({ username });
+    let user = await User.findOne({
+      $or: [{ username }, { email }],
+    });
 
-    if (!user || user.email !== email) {
+    if (!user) {
       return res.status(400).json({ msg: "Invalid credentials" });
     }
 
@@ -83,9 +85,10 @@ async function login(req, res) {
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 15 * 60 * 1000,
+      path: "/",
     });
 
     let refreshToken = jwt.sign(
@@ -96,14 +99,14 @@ async function login(req, res) {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/",
     });
 
     return res.json({
       msg: "Login successfull",
-      accessToken,
     });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
@@ -114,14 +117,16 @@ async function logout(req, res) {
   try {
     res.clearCookie("accessToken", {
       httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      secure: true,
+      sameSite: "none",
+      path: "/",
     });
 
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      secure: true,
+      sameSite: "none",
+      path: "/",
     });
 
     return res.status(200).json({
@@ -161,9 +166,10 @@ async function refresh(req, res) {
 
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 15 * 60 * 1000,
+      path: "/",
     });
 
     return res.json({ accessToken: newAccessToken });
@@ -193,4 +199,23 @@ async function authenticateUser(req, res, next) {
   });
 }
 
-export { signup, login, logout, loginLimiter, refresh, authenticateUser };
+async function checkAuth(req, res) {
+  try {
+    return res.status(200).json({
+      isLoggedIn: true,
+      userId: req.user.userId,
+    });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+export {
+  signup,
+  login,
+  logout,
+  loginLimiter,
+  refresh,
+  authenticateUser,
+  checkAuth,
+};

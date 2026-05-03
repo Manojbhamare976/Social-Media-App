@@ -51,7 +51,7 @@ export default function Login() {
     }
 
     try {
-      await api.post("http://localhost:3000/user/login", {
+      await api.post("/user/login", {
         username: username,
         email: email,
         password: password,
