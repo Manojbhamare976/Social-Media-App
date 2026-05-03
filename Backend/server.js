@@ -12,13 +12,29 @@ import connectDB from "./db.js";
 import cookieParser from "cookie-parser";
 
 //DB connection
-connectDB();
+const startServer = async () => {
+  await connectDB();
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+};
+
+startServer();
 
 const app = express();
 
+const allowedOrigins = [
+  "https://social-media-app.vercel.app",
+  "http://localhost:5173",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   }),
 );
@@ -45,4 +61,9 @@ app.use("/comment", commentRoutes);
 //post routes
 app.use("/save", saveRoutes);
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
