@@ -22,7 +22,7 @@ startServer();
 const app = express();
 
 const allowedOrigins = [
-  "https://social-media-app-zeta-tan.vercel.app/",
+  "https://social-media-app-zeta-tan.vercel.app",
   "http://localhost:5173",
 ];
 
