@@ -101,17 +101,16 @@ npm run dev
   <img src="./assets/screenshots/home.png" width="250"/>
   <img src="./assets/screenshots/profile.png" width="250"/>
   <img src="./assets/screenshots/search.png" width="250"/>
-  <img src="./assets/screenshots/search.png" width="250"/>
+  <img src="./assets/screenshots/createpost.png" width="250"/>
 </p>
 
 ## 🎥 Demo Video
 
-👉 (video link will be added soon)
+https://www.linkedin.com/posts/manoj-bhamare-b27863266_mern-webdevelopment-fullstack-ugcPost-7458231621415178240-FtJ4?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEFEQI8B0Jd1_LEbJ-GqjTdxj1xreLH4eaQ
 
 ## 🌐 Deployment
 
-> 🚧 Not deployed yet  
-> Live link will be added soon.
+https://lnkd.in/drGKCvRk
 
 ---
 
