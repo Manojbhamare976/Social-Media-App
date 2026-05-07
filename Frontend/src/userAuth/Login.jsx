@@ -65,7 +65,7 @@ export default function Login() {
 
   useEffect(() => {
     if (loggedIn) {
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     }
   }, [loggedIn, navigate]);
 

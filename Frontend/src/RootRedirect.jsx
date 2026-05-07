@@ -22,9 +22,5 @@ export default function RootRedirect() {
 
   if (loading) return <div>Loading...</div>;
 
-  return isLoggedIn ? (
-    <Navigate to="/userprofile" />
-  ) : (
-    <Navigate to="/signup" />
-  );
+  return isLoggedIn ? <Navigate to="/home" /> : <Navigate to="/signup" />;
 }
