@@ -92,14 +92,21 @@ async function deletePost(req, res) {
 
 async function getPost(req, res) {
   try {
-    let post = await Post.find({}).populate({
-      path: "user",
-      select: "username profilePic",
-    });
+    let posts = await Post.find({})
+      .populate({
+        path: "user",
+        select: "username profilePic",
+      })
+      .sort({ createdAt: -1 });
 
-    res.json(post);
+    posts = posts.filter((p) => p.user);
+
+    return res.status(200).json(posts);
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
+    return res.status(500).json({
+      msg: "Failed to fetch posts",
+    });
   }
 }
 
