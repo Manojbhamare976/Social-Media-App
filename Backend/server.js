@@ -17,6 +17,7 @@ const allowedOrigins = [
   "https://social-media-app-zeta-tan.vercel.app",
   "https://social-media-39iu2cwkv-manojbhamare976s-projects.vercel.app",
   "https://social-media-app-git-main-manojbhamare976s-projects.vercel.app",
+  "https://social-media-l885y6yn-manojbhamare976s-projects.vercel.app",
   "http://localhost:5173",
 ];
 
