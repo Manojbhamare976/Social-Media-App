@@ -22,7 +22,7 @@ startServer();
 const app = express();
 
 const allowedOrigins = [
-  "social-media-app-zeta-tan.vercel.app",
+  "https://social-media-app-zeta-tan.vercel.app",
   "https://social-media-39iu2cwkv-manojbhamare976s-projects.vercel.app",
   "https://social-media-app-git-main-manojbhamare976s-projects.vercel.app",
   "http://localhost:5173",
@@ -66,6 +66,3 @@ app.use("/save", saveRoutes);
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
