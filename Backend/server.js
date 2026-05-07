@@ -11,14 +11,6 @@ import saveRoutes from "./Routes/saveRoutes.js";
 import connectDB from "./db.js";
 import cookieParser from "cookie-parser";
 
-//DB connection
-const startServer = async () => {
-  await connectDB();
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-};
-
-startServer();
-
 const app = express();
 
 const allowedOrigins = [
@@ -66,3 +58,19 @@ app.use("/save", saveRoutes);
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
+
+const PORT = process.env.PORT || 3000;
+
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+startServer();
